@@ -1,6 +1,8 @@
 Travis CI Badge: https://travis-ci.com/csci312a-s20/fp-superblock.svg?token=zsh6TTG74Vg5xYRKtmYJ&branch=master
-Explanation of the need: Being able to play multiplayer super mario bros with your friends, online. 
-Link to deployed application: 
+
+Explanation of the need: Being able to play multiplayer super mario bros with your friends, online.
+
+Link to deployed application: (link here)
 
 # Project Skeleton Top-level
 
