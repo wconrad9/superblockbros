@@ -1,8 +1,8 @@
 {
-  "name": "project",
+  "name": "SuperBlock",
   "version": "0.1.0",
   "private": true,
-  "description": "Describe your project",
+  "description": "Online multiplayer Super-Mario-Bros type game",
   "engines": {
     "node": "12.14.x"
   },
