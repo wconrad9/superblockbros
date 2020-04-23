@@ -9,7 +9,7 @@ const App = () => {
   // Use this to test finding styled buttons
   const Button = styled.button``;
 
-  const GettingStartedDescription = styled.p`
+  const Instructions = styled.p`
     text-align: center;
     color: black;
     background: transparent;
@@ -31,6 +31,18 @@ const App = () => {
     </Button>
   );
 
+  const hostGameButton = (
+    <Button
+      type="button"
+      name="host game"
+      onClick={() => {
+        setMode("host lobby");
+      }}
+    >
+      Host Game
+    </Button>
+  );
+
   const returnButton = (
     <Button
       type="button"
@@ -44,17 +56,34 @@ const App = () => {
   );
 
   //Did the user click 'getting started'?
+  if (mode === "host lobby") {
+    return (
+      <div>
+        <header className="App-header">
+          <Title>SuperBlockBros</Title>
+        </header>
+        <Instructions>
+          You are the game host! Send your friends the game ID, wait for them to
+          join, then select a level to start! Or you can click to return to the
+          main menu.
+        </Instructions>
+        <Button> {returnButton} </Button>
+      </div>
+    );
+  }
+
+  //Did the user click 'getting started'?
   if (mode === "getting started") {
     return (
       <div>
         <header className="App-header">
           <Title>SuperBlockBros</Title>
         </header>
-        <GettingStartedDescription>
+        <Instructions>
           {" "}
           SuperBlockBros allows you to play online with your friends! Use the
           arrows to move, and get to the finish line first!
-        </GettingStartedDescription>
+        </Instructions>
         <Button> {returnButton} </Button>
       </div>
     );
@@ -68,7 +97,7 @@ const App = () => {
       <MenuContainer>
         <br />
         MAIN MENU <br /> <br /> <br />
-        <button className="menu-button">Play</button> <br /> <br />
+        <Button> {hostGameButton} </Button> <br /> <br />
         <button className="menu-button">Settings</button> <br /> <br />
         <Button> {gettingStartedButton} </Button>
       </MenuContainer>
