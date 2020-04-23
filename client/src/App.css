@@ -1,32 +1,48 @@
-.App {
-  text-align: center;
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-image: url("placeholder_wallpaper.jpg");
+  color: white;
+  font-family: "Press Start 2P", sans-serif;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 10px;
 }
 
 .App-header {
   background-color: #222;
-  height: 150px;
-  padding: 20px;
+  padding: 1px;
   color: white;
 }
 
 .App-title {
   font-size: 1.5em;
+  text-align: center;
 }
 
-.App-intro {
-  font-size: large;
-}
+.menu {
+  padding: 25px;
+  margin: auto;
+  margin-top: 30px;
+  text-align: center;
+  width: 80%;
+  height: 35%;
+  background: linear-gradient(to bottom, #b29f6c 0%, #daaf20 64%, #6d630b 100%);
+  border-radius: 8px;
+  border: 1px solid #424542;
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  box-shadow: 4px 4px #e7dfe7, -4px -4px #e7dfe7, 4px -4px #e7dfe7,
+    -4px 4px #e7dfe7, 0 -2px #9c9a9c, -2px 0 #7b757b, 0 2px #424542;
 }
