@@ -2,8 +2,6 @@ Travis CI Badge: https://travis-ci.com/csci312a-s20/fp-superblock.svg?token=zsh6
 Explanation of the need: Being able to play multiplayer super mario bros with your friends, online.
 Link to deployed application:
 
-##
-
 # Project Skeleton Top-level
 
 This repository combines the client and server into a single repository that can be co-developed, tested and ultimately deployed to Heroku or basin.cs.middlebury.edu.
