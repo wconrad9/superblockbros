@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
 import MenuContainer from "./MenuContainer";
 import "./App.css";
 import styled from "styled-components";
