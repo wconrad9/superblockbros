@@ -43,6 +43,18 @@ const App = () => {
     </Button>
   );
 
+  const joinGameButton = (
+    <Button
+      type="button"
+      name="join game"
+      onClick={() => {
+        setMode("join screen");
+      }}
+    >
+      Join Game
+    </Button>
+  );
+
   const returnButton = (
     <Button
       type="button"
@@ -55,7 +67,20 @@ const App = () => {
     </Button>
   );
 
-  //Did the user click 'getting started'?
+  //Did the user click 'join game'?
+  if (mode === "join screen") {
+    return (
+      <div>
+        <header className="App-header">
+          <Title>SuperBlockBros</Title>
+        </header>
+        <Instructions>Enter a unique ID to join a game!</Instructions>
+        <Button> {returnButton} </Button>
+      </div>
+    );
+  }
+
+  //Did the user click 'host Game'?
   if (mode === "host lobby") {
     return (
       <div>
@@ -98,6 +123,7 @@ const App = () => {
         <br />
         MAIN MENU <br /> <br /> <br />
         <Button> {hostGameButton} </Button> <br /> <br />
+        <Button> {joinGameButton} </Button> <br /> <br />
         <button className="menu-button">Settings</button> <br /> <br />
         <Button> {gettingStartedButton} </Button>
       </MenuContainer>
