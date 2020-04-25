@@ -3,6 +3,8 @@ import MenuContainer from "./MenuContainer";
 import "./App.css";
 import styled from "styled-components";
 
+import JoinInput from "./components/JoinInput";
+
 const App = () => {
   const [mode, setMode] = useState("menu");
 
@@ -67,6 +69,11 @@ const App = () => {
     </Button>
   );
 
+  const handleUniqueId = uniqueId => {
+    console.log("handled ID:");
+    console.log(uniqueId);
+  };
+
   //Did the user click 'join game'?
   if (mode === "join screen") {
     return (
@@ -75,6 +82,7 @@ const App = () => {
           <Title>SuperBlockBros</Title>
         </header>
         <Instructions>Enter a unique ID to join a game!</Instructions>
+        <JoinInput complete={handleUniqueId} />
         <Button> {returnButton} </Button>
       </div>
     );
