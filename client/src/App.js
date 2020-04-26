@@ -4,10 +4,15 @@ import "./App.css";
 import styled from "styled-components";
 
 import JoinInput from "./components/JoinInput";
+import HostLobby from "./components/HostLobby";
 
 const App = () => {
   const [mode, setMode] = useState("menu");
+  const [games, setGames] = useState([]);
 
+  const ButtonBar = styled.div`
+    margin: 10px;
+  `;
   // Use this to test finding styled buttons
   const Button = styled.button``;
 
@@ -69,9 +74,9 @@ const App = () => {
     </Button>
   );
 
-  const handleUniqueId = uniqueId => {
+  const handleCreateGame = game => {
     console.log("handled ID:");
-    console.log(uniqueId);
+    console.log(game.uniqueId);
   };
 
   //Did the user click 'join game'?
@@ -82,8 +87,8 @@ const App = () => {
           <Title>SuperBlockBros</Title>
         </header>
         <Instructions>Enter a unique ID to join a game!</Instructions>
-        <JoinInput complete={handleUniqueId} />
-        <Button> {returnButton} </Button>
+        <JoinInput complete={handleCreateGame} />
+        <ButtonBar> {returnButton} </ButtonBar>
       </div>
     );
   }
@@ -100,7 +105,8 @@ const App = () => {
           join, then select a level to start! Or you can click to return to the
           main menu.
         </Instructions>
-        <Button> {returnButton} </Button>
+        <HostLobby complete={handleCreateGame} />
+        <ButtonBar> {returnButton} </ButtonBar>
       </div>
     );
   }
@@ -117,7 +123,7 @@ const App = () => {
           SuperBlockBros allows you to play online with your friends! Use the
           arrows to move, and get to the finish line first!
         </Instructions>
-        <Button> {returnButton} </Button>
+        <ButtonBar> {returnButton} </ButtonBar>
       </div>
     );
   }
@@ -130,10 +136,10 @@ const App = () => {
       <MenuContainer>
         <br />
         MAIN MENU <br /> <br /> <br />
-        <Button> {hostGameButton} </Button> <br /> <br />
-        <Button> {joinGameButton} </Button> <br /> <br />
-        <button className="menu-button">Settings</button> <br /> <br />
-        <Button> {gettingStartedButton} </Button>
+        <ButtonBar> {hostGameButton} </ButtonBar>
+        <ButtonBar> {joinGameButton} </ButtonBar>
+        <button className="menu-button">Settings</button>
+        <ButtonBar> {gettingStartedButton} </ButtonBar>
       </MenuContainer>
     </div>
   );
