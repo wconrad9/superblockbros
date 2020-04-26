@@ -6,44 +6,38 @@ import styled from "styled-components";
 import JoinInput from "./components/JoinInput";
 import HostLobby from "./components/HostLobby";
 
+// Use this to test finding styled buttons
+const Button = styled.button``;
+
+const Instructions = styled.p`
+  text-align: center;
+  color: white;
+  background: transparent;
+`;
+
 const App = () => {
-  const [mode, setMode] = useState("menu");
+  const [mode, setMode] = useState("main menu scene");
   const [games, setGames] = useState([]);
 
-  const ButtonBar = styled.div`
-    margin: 10px;
-  `;
-  // Use this to test finding styled buttons
-  const Button = styled.button``;
+  const handleCreateGame = game => {
+    console.log("created game with id:");
+    console.log(game.uniqueId);
+    console.log(game);
 
-  const Instructions = styled.p`
-    text-align: center;
-    color: black;
-    background: transparent;
-  `;
+    const gamesCopy = games.map(currentGame => {
+      return currentGame;
+    });
 
-  const Title = styled.h1`
-    text-align: center;
-  `;
-
-  const gettingStartedButton = (
-    <Button
-      type="button"
-      name="Getting Started"
-      onClick={() => {
-        setMode("getting started");
-      }}
-    >
-      Getting Started
-    </Button>
-  );
+    gamesCopy.push(game);
+    setGames(gamesCopy);
+  };
 
   const hostGameButton = (
     <Button
       type="button"
-      name="host game"
+      name="hostGame"
       onClick={() => {
-        setMode("host lobby");
+        setMode("host scene");
       }}
     >
       Host Game
@@ -53,12 +47,36 @@ const App = () => {
   const joinGameButton = (
     <Button
       type="button"
-      name="join game"
+      name="joinGame"
       onClick={() => {
-        setMode("join screen");
+        setMode("join scene");
       }}
     >
       Join Game
+    </Button>
+  );
+
+  const settingsButton = (
+    <Button
+      type="button"
+      name="settings"
+      onClick={() => {
+        setMode("settings scene");
+      }}
+    >
+      Settings
+    </Button>
+  );
+
+  const gettingStartedButton = (
+    <Button
+      type="button"
+      name="gettingStarted"
+      onClick={() => {
+        setMode("getting started scene");
+      }}
+    >
+      Getting Started
     </Button>
   );
 
@@ -67,66 +85,65 @@ const App = () => {
       type="button"
       name="return"
       onClick={() => {
-        setMode("menu");
+        setMode("main menu scene");
       }}
     >
       Return to Menu
     </Button>
   );
 
-  const handleCreateGame = game => {
-    console.log("handled ID:");
-    console.log(game.uniqueId);
-  };
+  const mainMenuScene = (
+    <div>
+      <br />
+      MAIN MENU <br /> <br /> <br />
+      {hostGameButton} <br /> <br />
+      {joinGameButton} <br /> <br />
+      {settingsButton} <br /> <br />
+      {gettingStartedButton}
+    </div>
+  );
 
-  //Did the user click 'join game'?
-  if (mode === "join screen") {
-    return (
-      <div>
-        <header className="App-header">
-          <Title>SuperBlockBros</Title>
-        </header>
-        <Instructions>Enter a unique ID to join a game!</Instructions>
-        <JoinInput complete={handleCreateGame} />
-        <ButtonBar> {returnButton} </ButtonBar>
-      </div>
-    );
-  }
+  const hostScene = (
+    <div>
+      <Instructions>
+        You are the game host! Send your friends the game ID, wait for them to
+        join, then select a level to start! Or you can click to return to the
+        main menu.
+      </Instructions>
+      <HostLobby complete={handleCreateGame} />
+      {returnButton}
+    </div>
+  );
 
-  //Did the user click 'host Game'?
-  if (mode === "host lobby") {
-    return (
-      <div>
-        <header className="App-header">
-          <Title>SuperBlockBros</Title>
-        </header>
-        <Instructions>
-          You are the game host! Send your friends the game ID, wait for them to
-          join, then select a level to start! Or you can click to return to the
-          main menu.
-        </Instructions>
-        <HostLobby complete={handleCreateGame} />
-        <ButtonBar> {returnButton} </ButtonBar>
-      </div>
-    );
-  }
+  const joinScene = (
+    <div>
+      <Instructions>Enter a unique ID to join a game!</Instructions>
+      <JoinInput complete={handleCreateGame} />
+      {returnButton}
+    </div>
+  );
 
-  //Did the user click 'getting started'?
-  if (mode === "getting started") {
-    return (
-      <div>
-        <header className="App-header">
-          <Title>SuperBlockBros</Title>
-        </header>
-        <Instructions>
-          {" "}
-          SuperBlockBros allows you to play online with your friends! Use the
-          arrows to move, and get to the finish line first!
-        </Instructions>
-        <ButtonBar> {returnButton} </ButtonBar>
-      </div>
-    );
-  }
+  const settingsScene = (
+    <div>
+      <Instructions>
+        This screen is a work-in-progress. We will add functionality here for
+        players to change sound effects and music volume, set their 'playername'
+        and possibly custom player skins here (although that latter part might
+        be a bit of a stretch).
+      </Instructions>
+      {returnButton}
+    </div>
+  );
+
+  const gettingStartedScene = (
+    <div>
+      <Instructions>
+        SuperBlockBros allows you to play online with your friends! Use the
+        arrows to move, and get to the finish line first!
+      </Instructions>
+      {returnButton}
+    </div>
+  );
 
   return (
     <div className="App">
@@ -134,12 +151,11 @@ const App = () => {
         <h1 className="App-title">Super Block Bros</h1>
       </header>
       <MenuContainer>
-        <br />
-        MAIN MENU <br /> <br /> <br />
-        <ButtonBar> {hostGameButton} </ButtonBar>
-        <ButtonBar> {joinGameButton} </ButtonBar>
-        <button className="menu-button">Settings</button>
-        <ButtonBar> {gettingStartedButton} </ButtonBar>
+        {mode === "main menu scene" && mainMenuScene}
+        {mode === "host scene" && hostScene}
+        {mode === "join scene" && joinScene}
+        {mode === "settings scene" && settingsScene}
+        {mode === "getting started scene" && gettingStartedScene}
       </MenuContainer>
     </div>
   );

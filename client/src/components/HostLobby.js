@@ -6,13 +6,25 @@ const HostLobbyContainer = styled.div`
   margin: 40px;
 `;
 
+const TitleInput = styled.input`
+  display: block;
+`;
+
 const HostLobby = ({ game, complete }) => {
   const [uniqueId, setUniqueId] = useState(game ? game.uniqueId : "");
-  const [players, setPlayers] = useState(game ? game.players : 1);
+  const [numberOfPlayers, setNumberOfPlayers] = useState(
+    game ? game.numberOfPlayers : 1
+  );
+  const [hostUsername, setHostUsername] = useState(
+    game ? game.hostUsername : ""
+  );
+  const [players, setPlayers] = useState(game ? game.players : "");
 
   const constructGame = () => ({
     uniqueId: uniqueId,
-    players: players
+    numberOfPlayers: numberOfPlayers,
+    hostUsername: hostUsername,
+    players: []
   });
 
   const generateId = () => {
@@ -23,14 +35,32 @@ const HostLobby = ({ game, complete }) => {
   return (
     <HostLobbyContainer>
       <div>
+        <TitleInput
+          type="text"
+          size="45"
+          value={hostUsername}
+          placeholder="(enter username)"
+          onChange={event => setHostUsername(event.target.value)}
+        />
         <input
           type="button"
           onClick={() => {
-            complete(constructGame(generateId()));
+            generateId();
+          }}
+          value="Generate ID"
+        />
+        <p>Your unique id: {uniqueId}</p>
+        <input
+          type="button"
+          disabled={hostUsername === "" || uniqueId === ""}
+          onClick={() => {
+            let currentGame = constructGame();
+            currentGame.players.push(hostUsername);
+            complete(currentGame);
           }}
           value="Create Game"
         />
-        <p>Your unique id: {uniqueId}</p>
+        <p>Players: {game ? game.players : 1}/4</p>
       </div>
     </HostLobbyContainer>
   );
