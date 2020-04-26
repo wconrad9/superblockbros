@@ -4,27 +4,33 @@ import "./App.css";
 import styled from "styled-components";
 
 import JoinInput from "./components/JoinInput";
+import HostLobby from "./components/HostLobby";
+
+// Use this to test finding styled buttons
+const Button = styled.button``;
+
+const Instructions = styled.p`
+  text-align: center;
+  color: white;
+  background: transparent;
+`;
 
 const App = () => {
   const [mode, setMode] = useState("main menu scene");
+  const [games, setGames] = useState([]);
 
-  const handleUniqueId = uniqueId => {
-    console.log("handled ID:");
-    console.log(uniqueId);
+  const handleCreateGame = game => {
+    console.log("created game with id:");
+    console.log(game.uniqueId);
+    console.log(game);
+
+    const gamesCopy = games.map(currentGame => {
+      return currentGame;
+    });
+
+    gamesCopy.push(game);
+    setGames(gamesCopy);
   };
-
-  // Use this to test finding styled buttons
-  const Button = styled.button``;
-
-  const Instructions = styled.p`
-    text-align: center;
-    color: white;
-    background: transparent;
-  `;
-
-  const Title = styled.h1`
-    text-align: center;
-  `;
 
   const hostGameButton = (
     <Button
@@ -104,6 +110,7 @@ const App = () => {
         join, then select a level to start! Or you can click to return to the
         main menu.
       </Instructions>
+      <HostLobby complete={handleCreateGame} />
       {returnButton}
     </div>
   );
@@ -111,7 +118,7 @@ const App = () => {
   const joinScene = (
     <div>
       <Instructions>Enter a unique ID to join a game!</Instructions>
-      <JoinInput complete={handleUniqueId} />
+      <JoinInput complete={handleCreateGame} />
       {returnButton}
     </div>
   );
