@@ -13,7 +13,7 @@ const TitleInput = styled.input`
 const HostLobby = ({ game, complete }) => {
   const [uniqueId, setUniqueId] = useState(game ? game.uniqueId : "");
   const [numberOfPlayers, setNumberOfPlayers] = useState(
-    game ? game.numberOfPlayers : 1
+    game ? game.numberOfPlayers : 0
   );
   const [hostUsername, setHostUsername] = useState(
     game ? game.hostUsername : ""
@@ -40,7 +40,10 @@ const HostLobby = ({ game, complete }) => {
           size="45"
           value={hostUsername}
           placeholder="(enter username)"
-          onChange={event => setHostUsername(event.target.value)}
+          onChange={event => {
+            setHostUsername(event.target.value);
+            setNumberOfPlayers(1);
+          }}
         />
         <input
           type="button"
@@ -50,17 +53,19 @@ const HostLobby = ({ game, complete }) => {
           value="Generate ID"
         />
         <p>Your unique id: {uniqueId}</p>
+        <p>Players in lobby: {players}</p>
         <input
           type="button"
           disabled={hostUsername === "" || uniqueId === ""}
           onClick={() => {
             let currentGame = constructGame();
             currentGame.players.push(hostUsername);
+            setPlayers(currentGame.players);
             complete(currentGame);
           }}
           value="Create Game"
         />
-        <p>Players: {game ? game.players : 1}/4</p>
+        <p>Players: {game ? game.numberOfPlayers : 1}/4</p>
       </div>
     </HostLobbyContainer>
   );
