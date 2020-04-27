@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Frank Poth 02/28/2018
 
 /* This is a fixed time step game loop. It can be used for any game and will ensure

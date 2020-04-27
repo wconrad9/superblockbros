@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Frank Poth 03/09/2018
 
 /* This class hasn't changed much since part 1. All it does now is resize the canvas

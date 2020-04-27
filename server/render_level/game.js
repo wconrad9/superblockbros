@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Frank Poth 03/09/2018
 
 /* The Game class has been updated with a new Player class and given a new world

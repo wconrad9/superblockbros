@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Frank Poth 03/09/2018
 
 /* In part 2, I added a player character to the screen. I created world

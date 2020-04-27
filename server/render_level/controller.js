@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Frank Poth 03/09/2018
 
 /* The keyDownUp handler was moved to the main file. */
