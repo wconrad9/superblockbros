@@ -6,9 +6,18 @@ const HostLobbyContainer = styled.div`
   margin: 40px;
 `;
 
-const TitleInput = styled.input`
+const UsernameInput = styled.input`
   display: block;
 `;
+
+const Instructions = styled.p`
+  text-align: center;
+  color: white;
+  font-size: 0.25em;
+  background: transparent;
+`;
+
+const Button = styled.button``;
 
 const HostLobby = ({ game, complete }) => {
   const [uniqueId, setUniqueId] = useState(game ? game.uniqueId : "");
@@ -35,7 +44,7 @@ const HostLobby = ({ game, complete }) => {
   return (
     <HostLobbyContainer>
       <div>
-        <TitleInput
+        <UsernameInput
           type="text"
           size="45"
           value={hostUsername}
@@ -52,8 +61,8 @@ const HostLobby = ({ game, complete }) => {
           }}
           value="Generate ID"
         />
-        <p>Your unique id: {uniqueId}</p>
-        <p>Players in lobby: {players}</p>
+        <Instructions>Your unique id: {uniqueId}</Instructions>
+        <Instructions>Players in lobby: {players}</Instructions>
         <input
           type="button"
           disabled={hostUsername === "" || uniqueId === ""}
@@ -65,7 +74,17 @@ const HostLobby = ({ game, complete }) => {
           }}
           value="Create Game"
         />
-        <p>Players: {game ? game.numberOfPlayers : 1}/4</p>
+        <Instructions>
+          Players: {game ? game.numberOfPlayers : 1}/4
+        </Instructions>
+        <Button
+          as="a"
+          href="http://localhost:3001/spike.html?02"
+          value="Start Game!"
+        >
+          {hostUsername === "" || uniqueId === "" ? "" : "Start"}
+        </Button>
+         
       </div>
     </HostLobbyContainer>
   );

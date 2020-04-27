@@ -95,5 +95,3 @@ window.addEventListener("load", function(event) {
 
   engine.start();
 });
-
-export default main;

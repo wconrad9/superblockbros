@@ -52,5 +52,3 @@ const Display = function(canvas) {
 Display.prototype = {
   constructor: Display
 };
-
-export default display;

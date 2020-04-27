@@ -39,5 +39,3 @@ Controller.ButtonInput.prototype = {
     this.down = down;
   }
 };
-
-export default controller;

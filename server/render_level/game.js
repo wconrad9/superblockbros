@@ -92,5 +92,3 @@ Game.Player.prototype = {
     this.y += this.velocity_y;
   }
 };
-
-export default game;

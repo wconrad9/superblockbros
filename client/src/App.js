@@ -12,6 +12,7 @@ const Button = styled.button``;
 const Instructions = styled.p`
   text-align: center;
   color: white;
+  font-size: 1em;
   background: transparent;
 `;
 

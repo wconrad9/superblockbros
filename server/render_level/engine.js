@@ -73,5 +73,3 @@ Engine.prototype = {
     window.cancelAnimationFrame(this.animation_frame_request);
   }
 };
-
-export default engine;
