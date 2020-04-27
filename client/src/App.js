@@ -9,6 +9,11 @@ import HostLobby from "./components/HostLobby";
 // Use this to test finding styled buttons
 const Button = styled.button``;
 
+const UsernameInput = styled.input`
+  display: block;
+  margin: auto;
+`;
+
 const Instructions = styled.p`
   text-align: center;
   color: white;
@@ -19,6 +24,7 @@ const Instructions = styled.p`
 const App = () => {
   const [mode, setMode] = useState("main menu scene");
   const [games, setGames] = useState([]);
+  const [username, setUsername] = useState("guest");
 
   const handleCreateGame = game => {
     console.log("created game with id:");
@@ -32,6 +38,18 @@ const App = () => {
     gamesCopy.push(game);
     setGames(gamesCopy);
   };
+
+  const playButton = (
+    <Button
+      type="button"
+      name="play"
+      onClick={() => {
+        setMode("set name scene");
+      }}
+    >
+      Play
+    </Button>
+  );
 
   const hostGameButton = (
     <Button
@@ -97,10 +115,32 @@ const App = () => {
     <div>
       <br />
       MAIN MENU <br /> <br /> <br />
-      {hostGameButton} <br /> <br />
-      {joinGameButton} <br /> <br />
+      {playButton} <br /> <br />
       {settingsButton} <br /> <br />
       {gettingStartedButton}
+    </div>
+  );
+
+  const setNameScene = (
+    <div>
+      <p>
+        Enter your desired playername! This will be displayed over your
+        character in-game:
+      </p>
+      <UsernameInput
+        type="text"
+        size="45"
+        value={username}
+        placeholder="Eg: Sku11_Crush3r_739"
+        onChange={event => {
+          setUsername(event.target.value);
+          //setNumberOfPlayers(1);
+        }}
+      />{" "}
+      <br />
+      {hostGameButton} <br /> <br />
+      {joinGameButton} <br /> <br />
+      {returnButton}
     </div>
   );
 
@@ -111,7 +151,7 @@ const App = () => {
         join, then select a level to start! Or you can click to return to the
         main menu.
       </Instructions>
-      <HostLobby complete={handleCreateGame} />
+      <HostLobby complete={handleCreateGame} username={username} />
       {returnButton}
     </div>
   );
@@ -119,7 +159,7 @@ const App = () => {
   const joinScene = (
     <div>
       <Instructions>Enter a unique ID to join a game!</Instructions>
-      <JoinInput complete={handleCreateGame} />
+      <JoinInput complete={handleCreateGame} username={username} />
       {returnButton}
     </div>
   );
@@ -128,9 +168,8 @@ const App = () => {
     <div>
       <Instructions>
         This screen is a work-in-progress. We will add functionality here for
-        players to change sound effects and music volume, set their 'playername'
-        and possibly custom player skins here (although that latter part might
-        be a bit of a stretch).
+        players to change sound effects and music volume and possibly custom
+        player skins (although that latter part might be a bit of a stretch).
       </Instructions>
       {returnButton}
     </div>
@@ -153,6 +192,7 @@ const App = () => {
       </header>
       <MenuContainer>
         {mode === "main menu scene" && mainMenuScene}
+        {mode === "set name scene" && setNameScene}
         {mode === "host scene" && hostScene}
         {mode === "join scene" && joinScene}
         {mode === "settings scene" && settingsScene}

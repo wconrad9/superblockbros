@@ -8,11 +8,12 @@ const JoinContainer = styled.div`
 
 const Input = styled.input`
   display: block;
+  margin: auto;
 `;
 
-const JoinInput = ({ complete }) => {
+const JoinInput = ({ complete, username }) => {
   const [uniqueId, setUniqueId] = useState("");
-  const [username, setUsername] = useState("");
+  //const [username, setUsername] = useState("");
 
   const constructPlayer = () => ({
     uniqueId: uniqueId,
@@ -21,13 +22,6 @@ const JoinInput = ({ complete }) => {
 
   return (
     <JoinContainer>
-      <Input
-        type="text"
-        size="45"
-        value={username}
-        placeholder="(enter username)"
-        onChange={event => setUsername(event.target.value)}
-      />
       <Input
         type="text"
         size="45"

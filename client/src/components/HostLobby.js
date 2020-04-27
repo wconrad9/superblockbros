@@ -6,33 +6,27 @@ const HostLobbyContainer = styled.div`
   margin: 40px;
 `;
 
-const UsernameInput = styled.input`
-  display: block;
-`;
-
 const Instructions = styled.p`
   text-align: center;
   color: white;
-  font-size: 0.25em;
+  font-size: 8px;
   background: transparent;
 `;
 
 const Button = styled.button``;
 
-const HostLobby = ({ game, complete }) => {
+const HostLobby = ({ game, complete, username }) => {
   const [uniqueId, setUniqueId] = useState(game ? game.uniqueId : "");
+
   const [numberOfPlayers, setNumberOfPlayers] = useState(
     game ? game.numberOfPlayers : 0
-  );
-  const [hostUsername, setHostUsername] = useState(
-    game ? game.hostUsername : ""
   );
   const [players, setPlayers] = useState(game ? game.players : "");
 
   const constructGame = () => ({
     uniqueId: uniqueId,
     numberOfPlayers: numberOfPlayers,
-    hostUsername: hostUsername,
+    //hostUsername: hostUsername,
     players: []
   });
 
@@ -44,16 +38,6 @@ const HostLobby = ({ game, complete }) => {
   return (
     <HostLobbyContainer>
       <div>
-        <UsernameInput
-          type="text"
-          size="45"
-          value={hostUsername}
-          placeholder="(enter username)"
-          onChange={event => {
-            setHostUsername(event.target.value);
-            setNumberOfPlayers(1);
-          }}
-        />
         <input
           type="button"
           onClick={() => {
@@ -65,10 +49,10 @@ const HostLobby = ({ game, complete }) => {
         <Instructions>Players in lobby: {players}</Instructions>
         <input
           type="button"
-          disabled={hostUsername === "" || uniqueId === ""}
+          disabled={username === "" || uniqueId === ""}
           onClick={() => {
             let currentGame = constructGame();
-            currentGame.players.push(hostUsername);
+            currentGame.players.push(username);
             setPlayers(currentGame.players);
             complete(currentGame);
           }}
@@ -82,9 +66,8 @@ const HostLobby = ({ game, complete }) => {
           href="http://localhost:3001/spike.html?02"
           value="Start Game!"
         >
-          {hostUsername === "" || uniqueId === "" ? "" : "Start"}
+          {username === "" || uniqueId === "" ? "" : "Start"}
         </Button>
-         
       </div>
     </HostLobbyContainer>
   );
