@@ -39,5 +39,8 @@
     "{client/src,server}/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "styled-components": "^5.1.0"
   }
 }

@@ -12,19 +12,17 @@
   },
   "keywords": [],
   "contributors": [
-    "Student1 <student1@middlebury.edu>",
-    "Student2 <student2@middlebury.edu>",
-    "Student3 <student2@middlebury.edu>",
-    "Student4 <student3@middlebury.edu>",
-    "Student5 <student4@middlebury.edu>",
-    "Student6 <student5@middlebury.edu>",
-    "Student7 <student6@middlebury.edu>"
+    "Walter Conrad <wconrad@middlebury.edu>",
+    "Kevin Hernandez <kevinh@middlebury.edu>",
+    "Angad Virk <avirk@middlebury.edu>",
+    "Pierce Fricke <pfricke@middlebury.edu>"
   ],
   "license": "Apache-2.0",
   "dependencies": {
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "^3.4.0"
+    "react-scripts": "3.4.0",
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
     "enzyme": "^3.11.0",

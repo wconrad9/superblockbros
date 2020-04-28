@@ -1,32 +1,48 @@
-/* Frank Poth 08/13/2017 */
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-image: url("placeholder_wallpaper.jpg");
+  color: white;
+  font-family: "Press Start 2P", sans-serif;
+}
 
 * {
-
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-
+  box-sizing: border-box;
 }
 
-html, body {
-
-  height:100%;
-  width:100%;
-
+.App {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 10px;
 }
 
-body {
-
-  align-content:space-around;
-  background-color:#202830;
-  color:#ffffff;
-  display:grid;
-  justify-content:center;
-
+.App-header {
+  background-color: #222;
+  padding: 1px;
+  color: white;
 }
 
-canvas {
+.App-title {
+  font-size: 1.5em;
+  text-align: center;
+}
 
-  background-color:#ffffff;
+.menu {
+  padding: 25px;
+  margin: auto;
+  margin-top: 30px;
+  text-align: center;
+  width: 80%;
+  height: 38%;
+  background: linear-gradient(to bottom, #b29f6c 0%, #daaf20 64%, #6d630b 100%);
+  border-radius: 8px;
+  border: 1px solid #424542;
 
+  box-shadow: 4px 4px #e7dfe7, -4px -4px #e7dfe7, 4px -4px #e7dfe7,
+    -4px 4px #e7dfe7, 0 -2px #9c9a9c, -2px 0 #7b757b, 0 2px #424542;
 }
