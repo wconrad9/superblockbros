@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'production') {
 if (process.env.NODE_ENV === 'production') {
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', (request, response) => {
-    response.sendFile(path.join(buildPath, 'index.html'));
+    response.sendFile(path.join(buildPath, 'superblockbros.html'));
   });
 }
 
