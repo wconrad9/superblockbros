@@ -26,10 +26,11 @@ const JoinInput = ({ complete, username }) => {
         type="text"
         size="45"
         value={uniqueId}
-        placeholder="Enter a unique id"
+        placeholder="Enter Game ID (eg: 46)"
         onChange={event => setUniqueId(event.target.value)}
       />
       <div>
+        <br />
         <input
           type="button"
           disabled={uniqueId === "" || username === ""}

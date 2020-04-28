@@ -22,28 +22,26 @@ const Instructions = styled.p`
 `;
 
 const App = () => {
-  const [mode, setMode] = useState("main menu scene");
-  const [games, setGames] = useState([]);
+  /* State Variables */
+  const [mode, setMode] = useState("main menu scene"); // Current UI scene
+  const [prevMode, setPrevMode] = useState(""); // For 'back' button
+  const [currentGame, setCurrentGame] = useState(null);
   const [username, setUsername] = useState("guest");
+  //const [games, setGames] = useState([]);
 
-  const handleCreateGame = game => {
-    console.log("created game with id:");
-    console.log(game.uniqueId);
-    console.log(game);
-
-    const gamesCopy = games.map(currentGame => {
-      return currentGame;
-    });
-
-    gamesCopy.push(game);
-    setGames(gamesCopy);
-  };
+  const constructGame = () => ({
+    uniqueId: null, // Game ID for joining
+    numberOfPlayers: 0, // number of players currently in the game
+    players: []
+    //hostUsername: hostUsername,
+  });
 
   const playButton = (
     <Button
       type="button"
       name="play"
       onClick={() => {
+        setPrevMode(mode);
         setMode("set name scene");
       }}
     >
@@ -54,8 +52,20 @@ const App = () => {
   const hostGameButton = (
     <Button
       type="button"
+      disabled={username === ""}
       name="hostGame"
       onClick={() => {
+        // Create a game object
+        let createdGame = constructGame();
+        // Generate Game ID Randomly
+        createdGame.uniqueId = Math.floor(Math.random() * 101);
+        // Add game host to the list of players in the game
+        createdGame.players.push(username);
+        // Increment number of players in the game by 1
+        createdGame.numberOfPlayers++;
+        setCurrentGame(createdGame);
+
+        setPrevMode(mode);
         setMode("host scene");
       }}
     >
@@ -66,8 +76,10 @@ const App = () => {
   const joinGameButton = (
     <Button
       type="button"
+      disabled={username === ""}
       name="joinGame"
       onClick={() => {
+        setPrevMode(mode);
         setMode("join scene");
       }}
     >
@@ -80,6 +92,7 @@ const App = () => {
       type="button"
       name="settings"
       onClick={() => {
+        setPrevMode(mode);
         setMode("settings scene");
       }}
     >
@@ -92,6 +105,7 @@ const App = () => {
       type="button"
       name="gettingStarted"
       onClick={() => {
+        setPrevMode(mode);
         setMode("getting started scene");
       }}
     >
@@ -104,10 +118,25 @@ const App = () => {
       type="button"
       name="return"
       onClick={() => {
+        setPrevMode(mode);
         setMode("main menu scene");
       }}
     >
-      Return to Menu
+      Return to Main Menu
+    </Button>
+  );
+
+  const backButton = (
+    <Button
+      type="button"
+      name="return"
+      onClick={() => {
+        let temp = mode;
+        setMode(prevMode);
+        setPrevMode(temp);
+      }}
+    >
+      Back
     </Button>
   );
 
@@ -124,19 +153,19 @@ const App = () => {
   const setNameScene = (
     <div>
       <p>
-        Enter your desired playername! This will be displayed over your
+        Enter your desired playername -- this will be displayed over your
         character in-game:
       </p>
       <UsernameInput
         type="text"
         size="45"
         value={username}
-        placeholder="Eg: Sku11_Crush3r_739"
+        placeholder="Enter Name (eg: Sku11_Crush3r_739)"
         onChange={event => {
           setUsername(event.target.value);
           //setNumberOfPlayers(1);
         }}
-      />{" "}
+      />
       <br />
       {hostGameButton} <br /> <br />
       {joinGameButton} <br /> <br />
@@ -147,20 +176,26 @@ const App = () => {
   const hostScene = (
     <div>
       <Instructions>
-        You are the game host! Send your friends the game ID, wait for them to
-        join, then select a level to start! Or you can click to return to the
-        main menu.
+        Game hosted. Send your friends the Game ID so they can join!
       </Instructions>
-      <HostLobby complete={handleCreateGame} username={username} />
-      {returnButton}
+      <HostLobby currentGame={currentGame} />
+      <Button
+        as="a"
+        href="http://localhost:3001/spike.html?02"
+        value="Start Game!"
+      >
+        {"Start Game"}
+      </Button>
+      <br /> <br />
+      {backButton}
     </div>
   );
 
   const joinScene = (
     <div>
-      <Instructions>Enter a unique ID to join a game!</Instructions>
-      <JoinInput complete={handleCreateGame} username={username} />
-      {returnButton}
+      <Instructions>Enter a Game ID to join a game:</Instructions>
+      <JoinInput username={username} />
+      {backButton}
     </div>
   );
 
