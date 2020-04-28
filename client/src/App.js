@@ -26,8 +26,8 @@ const App = () => {
   const [mode, setMode] = useState("main menu scene"); // Current UI scene
   const [prevMode, setPrevMode] = useState(""); // For 'back' button
   const [currentGame, setCurrentGame] = useState(null);
-  const [username, setUsername] = useState("guest");
-  //const [games, setGames] = useState([]);
+  const [username, setUsername] = useState("");
+  const [games, setGames] = useState([]);
 
   const constructGame = () => ({
     uniqueId: null, // Game ID for joining
@@ -35,6 +35,32 @@ const App = () => {
     players: []
     //hostUsername: hostUsername,
   });
+
+  /*
+  const handleCreateGame = createdGame => {
+
+    const updatedGames = games.map(game => {
+      return game;
+    })
+
+    updatedGames.push(createdGame);
+    setGames(updatedGames);
+
+    console.log(games);
+  };
+  */
+
+  const handleCreateUniqueId = () => {
+    let possibleIds = [];
+
+    for (let i = 0; i < 100; i++) {
+      possibleIds.push(i);
+    }
+
+    const uniqueId = possibleIds.pop();
+
+    return uniqueId;
+  };
 
   const playButton = (
     <Button
@@ -58,12 +84,14 @@ const App = () => {
         // Create a game object
         let createdGame = constructGame();
         // Generate Game ID Randomly
-        createdGame.uniqueId = Math.floor(Math.random() * 101);
+        createdGame.uniqueId = handleCreateUniqueId();
         // Add game host to the list of players in the game
         createdGame.players.push(username);
         // Increment number of players in the game by 1
         createdGame.numberOfPlayers++;
         setCurrentGame(createdGame);
+
+        console.log(currentGame);
 
         setPrevMode(mode);
         setMode("host scene");
@@ -191,10 +219,23 @@ const App = () => {
     </div>
   );
 
+  const handleJoinGame = playerObject => {
+    if (currentGame.uniqueId == parseInt(playerObject.uniqueId)) {
+      const updatedGame = currentGame;
+
+      updatedGame.players.push(playerObject.username);
+      updatedGame.numberOfPlayers++;
+      setCurrentGame(updatedGame);
+      setMode("host scene");
+
+      // console.log(currentGame);
+    }
+  };
+
   const joinScene = (
     <div>
       <Instructions>Enter a Game ID to join a game:</Instructions>
-      <JoinInput username={username} />
+      <JoinInput username={username} complete={handleJoinGame} />
       {backButton}
     </div>
   );
