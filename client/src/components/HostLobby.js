@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -13,7 +13,7 @@ const Instructions = styled.p`
   background: transparent;
 `;
 
-const Button = styled.button``;
+// const Button = styled.button``;
 
 const HostLobby = ({ currentGame }) => {
   return (

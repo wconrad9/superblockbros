@@ -27,7 +27,7 @@ const App = () => {
   const [prevMode, setPrevMode] = useState(""); // For 'back' button
   const [currentGame, setCurrentGame] = useState(null);
   const [username, setUsername] = useState("");
-  const [games, setGames] = useState([]);
+  // const [games, setGames] = useState([]);
 
   const constructGame = () => ({
     uniqueId: null, // Game ID for joining
@@ -220,7 +220,7 @@ const App = () => {
   );
 
   const handleJoinGame = playerObject => {
-    if (currentGame.uniqueId == parseInt(playerObject.uniqueId)) {
+    if (currentGame.uniqueId === parseInt(playerObject.uniqueId)) {
       const updatedGame = currentGame;
 
       updatedGame.players.push(playerObject.username);
