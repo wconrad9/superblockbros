@@ -8,12 +8,10 @@ const JoinContainer = styled.div`
 
 const Input = styled.input`
   display: block;
-  margin: auto;
 `;
 
-const JoinInput = ({ complete, username }) => {
+const JoinInput = ({ username, complete }) => {
   const [uniqueId, setUniqueId] = useState("");
-  //const [username, setUsername] = useState("");
 
   const constructPlayer = () => ({
     uniqueId: uniqueId,
@@ -32,7 +30,7 @@ const JoinInput = ({ complete, username }) => {
       <div>
         <input
           type="button"
-          disabled={uniqueId === "" || username === ""}
+          disabled={uniqueId === ""}
           onClick={() => {
             complete(constructPlayer());
           }}
