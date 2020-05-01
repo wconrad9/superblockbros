@@ -1,4 +1,4 @@
-// const { app } = require('./routes');
+const { app } = require("./routes");
 
 test('Server "smoke" test', () => {
   expect(app).toBeDefined();
