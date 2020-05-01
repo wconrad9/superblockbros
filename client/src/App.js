@@ -27,7 +27,7 @@ const App = () => {
   const [prevMode, setPrevMode] = useState(""); // For 'back' button
   const [currentGame, setCurrentGame] = useState(null);
   const [username, setUsername] = useState("guest");
-  /* having 'guest' be the default username helps while 
+  /* having 'guest' be the default username helps while
      testing the app, otherwise have to enter a username
      each time to get to the host game or join game scenes
    */
@@ -61,7 +61,7 @@ const App = () => {
       possibleIds.push(i);
     }
     /* need random number selection from the array of
-       possibleIds... uniqueId is always 99 otherwise: 
+       possibleIds... uniqueId is always 99 otherwise:
      */
     const randChoice = Math.floor(Math.random() * 100);
     const uniqueId = possibleIds[randChoice];
