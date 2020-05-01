@@ -73,19 +73,6 @@ describe("App full rendering tests", () => {
     test("There should be a username input", () => {
       expect(app.find('input[type="text"]')).toBeDefined();
     });
-
-    test("Clicking 'Play' allows you to set username", async () => {
-      app
-        .find('input[type="text"]')
-        .simulate("change", { target: { value: "walt" } });
-
-      makeUsername(app, "walt");
-
-      await act(async () => await flushPromises());
-      app.update();
-
-      expect(app.username).toEqual("walt");
-    });
   });
 });
 /*
