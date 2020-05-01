@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path"); // eslint-disable-line global-require
 
-const cors = require("cors");
+// const cors = require("cors");
 const bodyParser = require("body-parser");
 const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig[process.env.NODE_ENV || "development"]);
@@ -22,11 +22,14 @@ const app = express();
 
 // Cross-Origin-Resource-Sharing headers tell the browser is OK for this page to request resources
 // from another domain (which is otherwise prohibited as a security mechanism)
+
+/*
 const corsOptions = {
   methods: ["GET", "PUT", "POST", "DELETE"],
   origin: "*",
   allowedHeaders: ["Content-Type", "Accept", "X-Requested-With", "Origin"]
 };
+*/
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
@@ -36,7 +39,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(express.static(buildPath2));
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 const games = {}; // Create in memory storage of the articles

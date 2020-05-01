@@ -1,9 +1,9 @@
-const { app } = require('./routes');
+const { app } = require("./routes");
 
 test('Server "smoke" test', () => {
   expect(app).toBeDefined();
 });
 
-test('dotenv configured', () => {
+test("dotenv configured", () => {
   expect(process.env.MY_SECRET).toBeDefined();
 });
