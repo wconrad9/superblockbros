@@ -26,7 +26,11 @@ const App = () => {
   const [mode, setMode] = useState("main menu scene"); // Current UI scene
   const [prevMode, setPrevMode] = useState(""); // For 'back' button
   const [currentGame, setCurrentGame] = useState(null);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("guest");
+  /* having 'guest' be the default username helps while 
+     testing the app, otherwise have to enter a username
+     each time to get to the host game or join game scenes
+   */
   // const [games, setGames] = useState([]);
 
   const constructGame = () => ({
@@ -56,8 +60,11 @@ const App = () => {
     for (let i = 0; i < 100; i++) {
       possibleIds.push(i);
     }
-
-    const uniqueId = possibleIds.pop();
+    /* need random number selection from the array of
+       possibleIds... uniqueId is always 99 otherwise: 
+     */
+    const randChoice = Math.floor(Math.random() * 100);
+    const uniqueId = possibleIds[randChoice];
 
     return uniqueId;
   };
