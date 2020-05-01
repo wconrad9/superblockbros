@@ -8,7 +8,7 @@ import App from "./App";
 // import JoinInput from "./components/JoinInput";
 // import MenuContainer from "./components/MenuContainer";
 
-import { findButton, flushPromises, makeUsername } from "./setupTests";
+import { findButton, flushPromises } from "./setupTests";
 
 describe("App initial rendering tests", () => {
   let app;
