@@ -1,12 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 
 import App from "./App";
-import HostLobby from "./components/HostLobby";
-import JoinInput from "./components/JoinInput";
-import MenuContainer from "./components/MenuContainer";
+// import HostLobby from "./components/HostLobby";
+// import JoinInput from "./components/JoinInput";
+// import MenuContainer from "./components/MenuContainer";
 
 import { findButton, flushPromises, makeUsername } from "./setupTests";
 
