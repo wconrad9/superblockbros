@@ -1,14 +1,14 @@
 import React from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 
 import App from "./App";
-import HostLobby from "./components/HostLobby";
-import JoinInput from "./components/JoinInput";
-import MenuContainer from "./components/MenuContainer";
+// import HostLobby from "./components/HostLobby";
+// import JoinInput from "./components/JoinInput";
+// import MenuContainer from "./components/MenuContainer";
 
-import { findButton, flushPromises, makeUsername } from "./setupTests";
+import { findButton, flushPromises } from "./setupTests";
 
 describe("App initial rendering tests", () => {
   let app;
@@ -72,19 +72,6 @@ describe("App full rendering tests", () => {
 
     test("There should be a username input", () => {
       expect(app.find('input[type="text"]')).toBeDefined();
-    });
-
-    test("Clicking 'Play' allows you to set username", async () => {
-      app
-        .find('input[type="text"]')
-        .simulate("change", { target: { value: "walt" } });
-
-      makeUsername(app, "walt");
-
-      await act(async () => await flushPromises());
-      app.update();
-
-      expect(app.username).toEqual("walt");
     });
   });
 });

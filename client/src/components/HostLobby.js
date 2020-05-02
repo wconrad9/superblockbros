@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const HostLobbyContainer = styled.div`
@@ -33,10 +33,6 @@ const HostLobby = ({ currentGame }) => {
       </Instructions>
     </HostLobbyContainer>
   );
-};
-
-HostLobby.propTypes = {
-  complete: PropTypes.func
 };
 
 export default HostLobby;

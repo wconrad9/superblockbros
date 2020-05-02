@@ -5,11 +5,13 @@ import "jest-enzyme";
 
 configure({ adapter: new Adapter() });
 
+/*
 export const makeUsername = (app, username) => {
   // Click on section header and then title of an article
   const section = app.find('input[type="text"]');
   section.simulate("change", { target: { value: "walt" } });
 };
+*/
 
 // Used to find the variety of buttons seen in use so far.
 
