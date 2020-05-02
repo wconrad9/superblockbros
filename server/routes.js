@@ -3,13 +3,13 @@ const path = require("path"); // eslint-disable-line global-require
 
 // const cors = require("cors");
 const bodyParser = require("body-parser");
-const knexConfig = require("./knexfile");
-const knex = require("knex")(knexConfig[process.env.NODE_ENV || "development"]);
-const { Model } = require("objection");
+// const knexConfig = require("./knexfile");
+// const knex = require("knex")(knexConfig[process.env.NODE_ENV || "development"]);
+// const { Model } = require("objection");
 const Game = require("./models/Game");
 
 // Bind all Models to a knex instance.
-Model.knex(knex);
+// Model.knex(knex);
 
 // db-errors provides a consistent wrapper around database errors
 const { wrapError, DBError } = require("db-errors");

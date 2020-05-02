@@ -8,5 +8,6 @@ console.log("Listening on port %d", server.address().port); // eslint-disable-li
 const io = socketIo(server);
 
 io.sockets.on("connection", socket => {
+  console.log(socket);
   console.log("New client connected");
 });
