@@ -12,14 +12,13 @@ const Controller = function() {
   this.keyDownUp = function(type, key_code) {
     var down = type == "keydown" ? true : false;
 
-    switch (key_code) {
-      case 37:
-        this.left.getInput(down);
-        break;
-      case 38:
-        this.up.getInput(down);
-        break;
-      case 39:
+    if (key_code == 37 || key_code == 65) {
+      this.left.getInput(down);
+    }
+    else if (key_code == 38 || key_code == 87 || key_code == 32) {
+      this.up.getInput(down);
+    }
+    else if (key_code == 39 || key_code == 68) {
         this.right.getInput(down);
     }
   };

@@ -14,6 +14,9 @@ As a general rule, anything that causes two components to communicate should be
 in the main file because we want to reduce internal references between components
 as much as possible. They should communicate via public methods that take primitives. */
 
+// import io from 'socket.io-client';
+// const socket = io.connect("http://localhost:3000");
+
 window.addEventListener("load", function(event) {
   "use strict";
 

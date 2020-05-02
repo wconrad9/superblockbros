@@ -97,9 +97,6 @@ const App = () => {
         // Increment number of players in the game by 1
         createdGame.numberOfPlayers++;
         setCurrentGame(createdGame);
-
-        console.log(currentGame);
-
         setPrevMode(mode);
         setMode("host scene");
       }}
@@ -216,7 +213,7 @@ const App = () => {
       <HostLobby currentGame={currentGame} />
       <Button
         as="a"
-        href="http://localhost:3001/spike.html?02"
+        href="http://localhost:3001/index.html?02"
         value="Start Game!"
       >
         {"Start Game"}

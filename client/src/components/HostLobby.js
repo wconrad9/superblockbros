@@ -36,7 +36,7 @@ const HostLobby = ({ currentGame }) => {
 };
 
 HostLobby.propTypes = {
-  complete: PropTypes.func.isRequired
+  complete: PropTypes.func
 };
 
 export default HostLobby;
