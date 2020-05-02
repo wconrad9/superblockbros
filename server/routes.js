@@ -15,8 +15,8 @@ Model.knex(knex);
 const { wrapError, DBError } = require("db-errors");
 
 // Resolve client build directory as absolute path to avoid errors in express
-const buildPath1 = path.resolve(__dirname, "../client/build");
-const buildPath2 = path.resolve(__dirname, "./render_level");
+const prodPath = path.resolve(__dirname, "../client/build");
+const devPath = path.resolve(__dirname, "../client/development_build/1");
 
 const app = express();
 
@@ -34,10 +34,10 @@ const corsOptions = {
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
   // Serve any static files as first priority
-  app.use(express.static(buildPath1));
+  app.use(express.static(prodPath));
 }
 
-app.use(express.static(buildPath2));
+app.use(express.static(devPath));
 
 // app.use(cors(corsOptions));
 app.use(bodyParser.json());
@@ -65,7 +65,7 @@ app.post("/api/games", (request, response, next) => {
 if (process.env.NODE_ENV === "production") {
   // All remaining requests return the React app, so it can handle routing.
   app.get("*", (request, response) => {
-    response.sendFile(path.join(buildPath1, "index.html"));
+    response.sendFile(path.join(prodPath, "index.html"));
   });
 }
 
