@@ -1,9 +1,28 @@
-const { app } = require("./routes");
+/* eslint-disable arrow-body-style */
+const request = require("supertest");
+const { app, knex } = require("./routes");
 
-test('Server "smoke" test', () => {
-  expect(app).toBeDefined();
-});
+const game = {
+  username: "wally"
+};
 
-test("dotenv configured", () => {
-  expect(process.env.MY_SECRET).toBeDefined();
+describe("Games API", () => {
+  beforeEach(() => {
+    return knex.migrate
+      .rollback()
+      .then(() => knex.migrate.latest())
+      .then(() => knex.seed.run());
+  });
+
+  afterEach(() => {
+    return knex.migrate.rollback();
+  });
+
+  test("GET /api/games should return all games", () => {
+    return request(app)
+      .get("/api/games")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .expect([{ id: 1, ...game }]);
+  });
 });

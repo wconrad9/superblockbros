@@ -12,13 +12,11 @@ class Game extends Model {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["uniqueId"],
+      required: ["username"],
 
       properties: {
-        hostUsername: { type: "string" },
-        uniqueId: { type: "integer" },
-        numberOfPlayers: { type: "integer" },
-        players: { type: "text" }
+        id: { type: "integer" },
+        username: { type: "string" }
       }
     };
   }
