@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MenuContainer from "./MenuContainer";
 import "./App.css";
 import styled from "styled-components";
@@ -31,42 +31,54 @@ const App = () => {
      testing the app, otherwise have to enter a username
      each time to get to the host game or join game scenes
    */
-  // const [games, setGames] = useState([]);
+  const [games, setGames] = useState([]);
+
+  // load the Simplepedia data
+  useEffect(() => {
+    fetch("/api/games/")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setGames(data);
+      })
+      .catch(err => console.log(err)); // eslint-disable-line no-console
+  }, []);
 
   const constructGame = () => ({
-    uniqueId: null, // Game ID for joining
-    numberOfPlayers: 0, // number of players currently in the game
-    players: []
-    //hostUsername: hostUsername,
+    username: null // Game ID for joining
+    // numberOfPlayers: 0, // number of players currently in the game
+    // players: []
+    // hostUsername: hostUsername,
   });
 
-  /*
   const handleCreateGame = createdGame => {
-
-    const updatedGames = games.map(game => {
-      return game;
+    fetch(`/api/games/`, {
+      method: "POST",
+      body: JSON.stringify(createdGame),
+      headers: new Headers({ "Content-type": "application/json" })
     })
-
-    updatedGames.push(createdGame);
-    setGames(updatedGames);
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(
+        data => {
+          const newGames = games.map(game => {
+            return game;
+          });
+          newGames.push(data);
+          setGames(newGames);
+        },
+        () => void 0
+      );
 
     console.log(games);
-  };
-  */
-
-  const handleCreateUniqueId = () => {
-    let possibleIds = [];
-
-    for (let i = 0; i < 100; i++) {
-      possibleIds.push(i);
-    }
-    /* need random number selection from the array of
-       possibleIds... uniqueId is always 99 otherwise:
-     */
-    const randChoice = Math.floor(Math.random() * 100);
-    const uniqueId = possibleIds[randChoice];
-
-    return uniqueId;
   };
 
   const playButton = (
@@ -91,11 +103,14 @@ const App = () => {
         // Create a game object
         let createdGame = constructGame();
         // Generate Game ID Randomly
-        createdGame.uniqueId = handleCreateUniqueId();
+        // createdGame.id = handleCreateUniqueId();
         // Add game host to the list of players in the game
-        createdGame.players.push(username);
+        createdGame.username = username;
         // Increment number of players in the game by 1
-        createdGame.numberOfPlayers++;
+        // createdGame.numberOfPlayers++;
+
+        handleCreateGame(createdGame);
+
         setCurrentGame(createdGame);
         setPrevMode(mode);
         setMode("host scene");
@@ -223,17 +238,22 @@ const App = () => {
     </div>
   );
 
-  const handleJoinGame = playerObject => {
-    if (currentGame.uniqueId === parseInt(playerObject.uniqueId)) {
-      const updatedGame = currentGame;
+  const handleJoinGame = joinRequest => {
+    console.log(joinRequest.uniqueId);
 
-      updatedGame.players.push(playerObject.username);
-      updatedGame.numberOfPlayers++;
-      setCurrentGame(updatedGame);
-      setMode("host scene");
+    fetch(`/api/games/${joinRequest.uniqueId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // do something with socket?
 
-      // console.log(currentGame);
-    }
+        setMode("host scene"); //could be a placeholder until socket functionality is implemented
+        console.log(data);
+      });
   };
 
   const joinScene = (
