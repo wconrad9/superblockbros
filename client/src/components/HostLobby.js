@@ -16,23 +16,7 @@ const Instructions = styled.p`
 // const Button = styled.button``;
 
 const HostLobby = ({ currentGame }) => {
-  return (
-    <HostLobbyContainer>
-      <Instructions>Game ID: {currentGame.uniqueId}</Instructions>
-      <Instructions>Players: {currentGame.numberOfPlayers}/4</Instructions>
-      <Instructions>Currently in lobby:</Instructions>
-      <Instructions>{currentGame.players[0]}</Instructions>
-      <Instructions>
-        {currentGame.players[1] ? currentGame.players[1] : ""}
-      </Instructions>
-      <Instructions>
-        {currentGame.players[2] ? currentGame.players[2] : ""}
-      </Instructions>
-      <Instructions>
-        {currentGame.players[3] ? currentGame.players[3] : ""}
-      </Instructions>
-    </HostLobbyContainer>
-  );
+  return <HostLobbyContainer></HostLobbyContainer>;
 };
 
 export default HostLobby;

@@ -2,10 +2,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable("Games", table => {
     table.increments("id").primary();
-    table
-      .string("username")
-      .unique()
-      .notNullable();
+    table.string("username").notNullable();
   });
 };
 
