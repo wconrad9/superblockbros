@@ -81,21 +81,6 @@ const App = () => {
     console.log(games);
   };
 
-  const handleCreateUniqueId = () => {
-    let possibleIds = [];
-
-    for (let i = 0; i < 100; i++) {
-      possibleIds.push(i);
-    }
-    /* need random number selection from the array of
-       possibleIds... uniqueId is always 99 otherwise:
-     */
-    const randChoice = Math.floor(Math.random() * 100);
-    const uniqueId = possibleIds[randChoice];
-
-    return uniqueId;
-  };
-
   const playButton = (
     <Button
       type="button"
@@ -265,21 +250,11 @@ const App = () => {
       })
       .then(data => {
         // do something with socket?
-        setMode("hostScene");
+
+        setMode("host scene"); //could be a placeholder until socket functionality is implemented
         console.log(data);
       });
   };
-
-  /*
-    if (currentGame.uniqueId === parseInt(playerObject.uniqueId)) {
-      const updatedGame = currentGame;
-
-      updatedGame.players.push(playerObject.username);
-      updatedGame.numberOfPlayers++;
-      setCurrentGame(updatedGame);
-      setMode("host scene");
-      */
-  // console.log(currentGame);
 
   const joinScene = (
     <div>

@@ -9,7 +9,7 @@ const path = require("path"); // eslint-disable-line global-require
 const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig[process.env.NODE_ENV || "development"]);
 
-const { Model, ValidationError } = require("objection");
+const { Model } = require("objection");
 const Game = require("./models/Game");
 
 // Bind all Models to a knex instance.
@@ -55,7 +55,7 @@ app.get("/api/games", (request, response, next) => {
   }, next); // <- Notice the "next" function as the rejection handler
 });
 
-//get a game to execute a join
+// get a game to execute a join
 app.get("/api/games/:id", (request, response, next) => {
   /*
   const { id } = request.body;

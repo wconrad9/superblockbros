@@ -16,7 +16,11 @@ const Instructions = styled.p`
 // const Button = styled.button``;
 
 const HostLobby = ({ currentGame }) => {
-  return <HostLobbyContainer></HostLobbyContainer>;
+  return (
+    <HostLobbyContainer>
+      <Instructions>Start the game when all players have joined!</Instructions>
+    </HostLobbyContainer>
+  );
 };
 
 export default HostLobby;
