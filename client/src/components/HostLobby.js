@@ -18,6 +18,7 @@ const Instructions = styled.p`
 const HostLobby = ({ currentGame }) => {
   return (
     <HostLobbyContainer>
+      <Instructions>Game Id: {currentGame.id}</Instructions>
       <Instructions>Start the game when all players have joined!</Instructions>
     </HostLobbyContainer>
   );

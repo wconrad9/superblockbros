@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <!-- Added this meta tag 04/07/2018 -->
+    <meta name = "viewport" content = "user-scalable=no,width=device-width">
+    <link href = "rabbit-trap.css" rel = "stylesheet" type = "text/css">
+    <title>Rabbit Trap</title>
+
+  </head>
+
+  <body>
+
+    <!-- Added a menu to navigate projects from the main page -->
+    <div id = "menu">
+      <p>menu</p>
+      <div id = "menu-list">
+        <br>
+        <a href = "rabbit-trap.html?01">part1</a>
+        <a href = "index.html?02">part2</a>
+        <a href = "rabbit-trap.html?03">part3</a>
+        <a href = "rabbit-trap.html?04">part4</a>
+        <a href = "rabbit-trap.html?05">part5</a>
+        <a href = "rabbit-trap.html?06">part6</a>
+        <a href = "rabbit-trap.html?07">part7</a>
+      </div>
+    </div>
+
+    <canvas></canvas>
+
+    <!-- Since Rabbit Trap is a multi-part series and I didn't feel like writing
+    html and css for every single part, I decided to dynamically add the appropriate
+    js file containing the game logic for each part based on url parameters. -->
+    <script type = "text/javascript">
+
+      let part = String(window.location).split("?")[1];
+
+      /* Added on 03/09/2018 to allow reusing scripts from previous parts. */
+      let parts = {
+        "01":["controller.js", "display.js", "engine.js", "game.js", "main.js"],
+
+      };
+
+      switch(part) {
+
+        case "01": break;
+        default:
+          part = "01";
+
+      }
+
+      for (let index = 0; index < parts[part].length; index ++) {
+
+        let script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        script.setAttribute("src", parts[part][index]);
+        document.head.appendChild(script);
+
+      }
+
+      let menu      = document.getElementById("menu");
+      let menu_list = document.getElementById("menu-list");
+
+      menu.addEventListener("click", function(event) {
+
+        menu_list.style.display = (menu_list.style.display == "none") ? "grid" : "none";
+
+      });
+
+      menu_list.style.display = "none";
+
+    </script>
+
+  </body>
+
+</html>
