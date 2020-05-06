@@ -9,7 +9,7 @@ console.log("Listening on port %d", server.address().port); // eslint-disable-li
 const io = socketIo(server);
 
 io.sockets.on("connection", socket => {
-  console.log("New connection -- socket id: " + socket.id); // eslint-disable-line no-console
+  console.log(`New connection -- socket id: ${socket.id}`); // eslint-disable-line no-console
 
   socket.on("joinRoom", joinRoomRequest => {
     socket.join(joinRoomRequest.id);
