@@ -22,4 +22,12 @@ io.sockets.on("connection", socket => {
       .to(playerPositionData.roomId)
       .emit("playerPosition", updatedPlayerPositionData);
   });
+
+  socket.on("winMsg", winnerInfo => {
+    socket.to(winnerInfo.roomId).emit("winMsg", winnerInfo);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });

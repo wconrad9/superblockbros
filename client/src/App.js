@@ -17,7 +17,7 @@ const UsernameInput = styled.input`
 const Instructions = styled.p`
   text-align: center;
   color: white;
-  font-size: 1em;
+  font-size: 12px;
   background: transparent;
 `;
 
@@ -26,7 +26,7 @@ const App = () => {
   const [mode, setMode] = useState("main menu scene"); // Current UI scene
   const [prevMode, setPrevMode] = useState(""); // For 'back' button
   const [currentGame, setCurrentGame] = useState(null);
-  const [username, setUsername] = useState("guest");
+  const [username, setUsername] = useState("");
   const [url, setUrl] = useState("");
   /* having 'guest' be the default username helps while
      testing the app, otherwise have to enter a username
@@ -227,9 +227,10 @@ const App = () => {
 
   const hostScene = (
     <div>
-      <Instructions>
-        Game hosted. Send your friends the Game ID so they can join!
-      </Instructions>
+      <p>
+        Game hosted. Start the game, send your friends the Game ID and wait for
+        them to join!
+      </p>
       <HostLobby currentGame={currentGame} />
       <Button id="startButton" as="a" href={url} value="Start Game!">
         {"Start Game"}
@@ -258,7 +259,7 @@ const App = () => {
   const joinScene = (
     <div>
       <p>Your Player Name: {username}</p>
-      <Instructions>Enter a Game ID to join a game:</Instructions>
+      <p>Enter a Game ID to join a game:</p>
       <JoinInput username={username} complete={handleJoinGame} />
       {backButton}
     </div>
@@ -266,11 +267,11 @@ const App = () => {
 
   const settingsScene = (
     <div>
-      <Instructions>
+      <p>
         This screen is a work-in-progress. We will add functionality here for
         players to change sound effects and music volume and possibly custom
         player skins (although that latter part might be a bit of a stretch).
-      </Instructions>
+      </p>
       {returnButton}
     </div>
   );
@@ -278,8 +279,21 @@ const App = () => {
   const gettingStartedScene = (
     <div>
       <Instructions>
-        SuperBlockBros allows you to play online with your friends! Use the
-        arrows to move, and get to the finish line first!
+        SuperBlockBros allows you to play online with your friends!
+      </Instructions>
+      <Instructions>
+        First, someone needs to 'host' a game. This can be done by clicking
+        'play' and then 'host game'.
+      </Instructions>
+      <Instructions>
+        Each hosted game has a unique Game ID that is shown to the host.
+      </Instructions>
+      <Instructions>
+        Up to 3 other players can join a hosted game if they go to the 'join
+        game' screen, enter that ID, and click 'Join Game!'.
+      </Instructions>
+      <Instructions>
+        The game will start when the host decides. Enjoy playing!
       </Instructions>
       {returnButton}
     </div>
