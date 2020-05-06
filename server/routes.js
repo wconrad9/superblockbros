@@ -17,7 +17,7 @@ Model.knex(knex);
 
 // Resolve client build directory as absolute path to avoid errors in express
 const prodPath = path.resolve(__dirname, "../client/build");
-const devPath = path.resolve(__dirname, "../client/development_build/1");
+const devPath = path.resolve(__dirname, "../client/development_build/2");
 
 // db-errors provides a consistent wrapper around database errors
 const { wrapError, DBError } = require("db-errors");

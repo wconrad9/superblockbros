@@ -27,13 +27,14 @@ const App = () => {
   const [prevMode, setPrevMode] = useState(""); // For 'back' button
   const [currentGame, setCurrentGame] = useState(null);
   const [username, setUsername] = useState("guest");
+  const [url, setUrl] = useState("");
   /* having 'guest' be the default username helps while
      testing the app, otherwise have to enter a username
      each time to get to the host game or join game scenes
    */
   const [games, setGames] = useState([]);
 
-  // load the Simplepedia data
+  // load the game data
   useEffect(() => {
     fetch("/api/games/")
       .then(response => {
@@ -72,12 +73,16 @@ const App = () => {
           const newGames = games.map(game => {
             return game;
           });
+          setCurrentGame(data);
+          const queryParam = data.id.toString();
+          const urlString = "http://localhost:3001/index.html?id=" + queryParam;
+          setUrl(urlString);
           newGames.push(data);
           setGames(newGames);
         },
         () => void 0
       );
-
+    console.log(currentGame);
     console.log(games);
   };
 
@@ -226,11 +231,7 @@ const App = () => {
         Game hosted. Send your friends the Game ID so they can join!
       </Instructions>
       <HostLobby currentGame={currentGame} />
-      <Button
-        as="a"
-        href="http://localhost:3001/index.html?02"
-        value="Start Game!"
-      >
+      <Button id="startButton" as="a" href={url} value="Start Game!">
         {"Start Game"}
       </Button>
       <br /> <br />
@@ -249,8 +250,6 @@ const App = () => {
         return response.json();
       })
       .then(data => {
-        // do something with socket?
-
         setMode("host scene"); //could be a placeholder until socket functionality is implemented
         console.log(data);
       });
@@ -258,6 +257,7 @@ const App = () => {
 
   const joinScene = (
     <div>
+      <p>Your Player Name: {username}</p>
       <Instructions>Enter a Game ID to join a game:</Instructions>
       <JoinInput username={username} complete={handleJoinGame} />
       {backButton}
