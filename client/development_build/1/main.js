@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // Frank Poth 03/09/2018
 
 /* In part 2, I added a player character to the screen. I created world
@@ -14,14 +12,12 @@ As a general rule, anything that causes two components to communicate should be
 in the main file because we want to reduce internal references between components
 as much as possible. They should communicate via public methods that take primitives. */
 
-// import io from 'socket.io-client';
-// const socket = io.connect("http://localhost:3000");
-
 window.addEventListener("load", function(event) {
+
   "use strict";
 
-  ///////////////////
-  //// FUNCTIONS ////
+      ///////////////////
+    //// FUNCTIONS ////
   ///////////////////
 
   /* This used to be in the Controller class, but I moved it out to the main file.
@@ -30,7 +26,9 @@ window.addEventListener("load", function(event) {
   To prevent referencing those components inside of my controller logic, I moved
   all of my event handlers here, to the main file. */
   var keyDownUp = function(event) {
+
     controller.keyDownUp(event.type, event.keyCode);
+
   };
 
   /* I also moved this handler out of Display since part 1 of this series. The reason
@@ -38,52 +36,41 @@ window.addEventListener("load", function(event) {
   to the dimensions of the game world. I don't want to reference game inside of my
   Display class, so I moved the resize method into the main file. */
   var resize = function(event) {
-    display.resize(
-      document.documentElement.clientWidth - 32,
-      document.documentElement.clientHeight - 32,
-      game.world.height / game.world.width
-    );
+
+    display.resize(document.documentElement.clientWidth - 32, document.documentElement.clientHeight - 32, game.world.height / game.world.width);
     display.render();
+
   };
 
   var render = function() {
-    display.fill(game.world.background_color); // Clear background to game's background color.
-    display.drawRectangle(
-      game.world.player.x,
-      game.world.player.y,
-      game.world.player.width,
-      game.world.player.height,
-      game.world.player.color
-    );
+
+    display.fill(game.world.background_color);// Clear background to game's background color.
+    display.drawRectangle(game.world.player.x, game.world.player.y, game.world.player.width, game.world.player.height, game.world.player.color);
     display.render();
+
   };
 
   var update = function() {
-    if (controller.left.active) {
-      game.world.player.moveLeft();
-    }
-    if (controller.right.active) {
-      game.world.player.moveRight();
-    }
-    if (controller.up.active) {
-      game.world.player.jump();
-      controller.up.active = false;
-    }
+
+    if (controller.left.active)  { game.world.player.moveLeft();  }
+    if (controller.right.active) { game.world.player.moveRight(); }
+    if (controller.up.active)    { game.world.player.jump(); controller.up.active = false; }
 
     game.update();
+
   };
 
-  /////////////////
-  //// OBJECTS ////
+      /////////////////
+    //// OBJECTS ////
   /////////////////
 
   var controller = new Controller();
-  var display = new Display(document.querySelector("canvas"));
-  var game = new Game();
-  var engine = new Engine(1000 / 30, render, update);
+  var display    = new Display(document.querySelector("canvas"));
+  var game       = new Game();
+  var engine     = new Engine(1000/30, render, update);
 
-  ////////////////////
-  //// INITIALIZE ////
+      ////////////////////
+    //// INITIALIZE ////
   ////////////////////
 
   /* This is very important. The buffer canvas must be pixel for pixel the same
@@ -93,10 +80,11 @@ window.addEventListener("load", function(event) {
   display.buffer.canvas.width = game.world.width;
 
   window.addEventListener("keydown", keyDownUp);
-  window.addEventListener("keyup", keyDownUp);
-  window.addEventListener("resize", resize);
+  window.addEventListener("keyup",   keyDownUp);
+  window.addEventListener("resize",  resize);
 
   resize();
 
   engine.start();
+
 });
