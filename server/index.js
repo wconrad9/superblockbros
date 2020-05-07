@@ -12,7 +12,19 @@ io.sockets.on("connection", socket => {
   console.log(`New connection -- socket id: ${socket.id}`); // eslint-disable-line no-console
 
   socket.on("joinRoom", joinRoomRequest => {
+    console.log("joinRoom message received");
     socket.join(joinRoomRequest.id);
+  });
+
+  socket.on("roomCheckRequest", roomCheckRequest => {
+    console.log("roomCheck message received");
+    const roomCheckResponse = io.sockets.adapter.rooms[roomCheckRequest.id];
+    socket.emit("roomCheckResponse", roomCheckResponse);
+  });
+
+  socket.on("leaveRoomRequest", leaveRoomRequest => {
+    console.log("leaveRoom message received");
+    socket.leave(leaveRoomRequest.id);
   });
 
   socket.on("playerPosition", playerPositionData => {
