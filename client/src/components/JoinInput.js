@@ -60,7 +60,9 @@ const JoinInput = ({ username, socket }) => {
           socket.emit("roomCheckRequest", roomCheckRequest);
 
           const queryParam = event.target.value.toString();
-          const urlString = "http://localhost:3001/index.html?id=" + queryParam;
+          const urlString =
+            "http://localhost:3001/index.html?id=" + queryParam + "&host=0";
+          // host=false at the end to indicate to the game that the person joining is not the host
           setUrl(urlString);
         }}
       />

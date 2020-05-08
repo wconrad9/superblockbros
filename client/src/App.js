@@ -144,7 +144,8 @@ const App = () => {
         // Add game host to the list of players in the game
         createdGame.username = username;
         const queryParam = createdGame.id.toString();
-        const urlString = "http://localhost:3001/index.html?id=" + queryParam;
+        const urlString =
+          "http://localhost:3001/index.html?id=" + queryParam + "&host=1"; // host=1 at end to indicate that this person is the host
         setUrl(urlString);
         setCurrentGame(createdGame);
         // create a room with the game's Id
@@ -263,11 +264,12 @@ const App = () => {
   const hostScene = (
     <div>
       <p>
-        Game hosted. Send your friends the Game ID and wait for them to join!
+        Game hosted. Send your friends the Game ID and wait for them to join in
+        the Waiting Area!
       </p>
       <HostLobby currentGame={currentGame} />
-      <Button id="startButton" as="a" href={url} value="Start Game!">
-        {"Start Game"}
+      <Button id="startButton" as="a" href={url} value="Enter Waiting Area">
+        {"Enter Waiting Area"}
       </Button>
       <br /> <br />
       {/* Button to go back and also delete hosted room */}
@@ -328,22 +330,30 @@ const App = () => {
   const gettingStartedScene = (
     <div>
       <Instructions>
-        SuperBlockBros allows you to play online with your friends!
+        SuperBlockBros's main focus is multiplayer. Here's how you can get
+        started:
       </Instructions>
       <Instructions>
-        First, someone needs to 'host' a game. This can be done by clicking
-        'play' and then 'host game'.
+        First, click 'Play' from the main menu. This will take you to another
+        menu where you can enter your player name, and are given the option to
+        either host or join a game.
       </Instructions>
       <Instructions>
-        Each hosted game has a unique Game ID that is shown to the host.
+        HOSTING INSTRUCTIONS: If you choose to host, you will be taken to
+        another screen where you are shown the ID of your hosted game. You need
+        to give this ID to your friends for them to join your hosted game.
       </Instructions>
       <Instructions>
-        Up to 3 other players can join a hosted game if they go to the 'join
-        game' screen, enter that ID, and click 'Join Game!'.
+        In the 'Waiting Area', A button labeled 'Start Game' will appear once
+        least one other player has joined, that you can click on at any time to
+        start the game.
       </Instructions>
       <Instructions>
-        The game will start when the host decides. Enjoy playing!
+        JOINING INSTRUCTIONS: If you want to join, you will be taken to a screen
+        where you can enter IDs and join games. (NOTE: The 'Join Game' button
+        will only be shown if you've entered a valid ID).
       </Instructions>
+      <Instructions>We hope you enjoy Super Block Bros.</Instructions>
       {returnButton}
     </div>
   );

@@ -22,6 +22,14 @@ io.sockets.on("connection", socket => {
     socket.emit("roomCheckResponse", roomCheckResponse);
   });
 
+  socket.on("startRaceRequest", startRaceRequest => {
+    console.log("startRaceRequest received");
+    const startRaceResponse = { ...startRaceRequest };
+    socket
+      .to(startRaceRequest.roomId)
+      .emit("startRaceResponse", startRaceResponse);
+  });
+
   socket.on("leaveRoomRequest", leaveRoomRequest => {
     console.log("leaveRoom message received");
     socket.leave(leaveRoomRequest.id);

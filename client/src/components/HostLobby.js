@@ -19,10 +19,7 @@ const HostLobby = ({ currentGame }) => {
   return (
     <HostLobbyContainer>
       <Instructions>Game Id: {currentGame.id}</Instructions>
-      <Instructions>
-        You can click 'Start Game' to play around while you wait for your
-        friends to join!
-      </Instructions>
+      <Instructions>Host Name: {currentGame.username}</Instructions>
     </HostLobbyContainer>
   );
 };

@@ -1,11 +1,16 @@
 // Frank Poth 08/13/2017
 // Add event listener for if page is loaded
 window.addEventListener("load", function(event) {
-  var context, menuButton, controller, rectangle, loop;
+  var context, menuButton, playButton, controller, rectangle, loop;
 
   context = document.querySelector("canvas").getContext("2d");
   menuButton = document.getElementById("menuButton");
-  //menuButton.style.opacity = "0";
+  playButton = document.getElementById("playButton");
+
+  menuButton.disabled = true; // disable menuButton functionality until game ends
+  playButton.disabled = true; // disable playButton functionality until at least 2 players exist
+  // get query params
+  const params = new URLSearchParams(window.location.search);
 
   context.canvas.height = 180;
   context.canvas.width = 320;
@@ -52,13 +57,15 @@ window.addEventListener("load", function(event) {
   // connect to server via socket
   const socket = io.connect('http://localhost:3001');
   // parse URL and extract queryparameters to enter a specific room
-  const params = new URLSearchParams(window.location.search);
   const joinRoomRequest = {
     id: params.get("id").toString()
   }
   socket.emit("joinRoom", joinRoomRequest);
   // To display Game ID in-game
   const gameIdString = "Game ID: " + joinRoomRequest.id;
+
+  // get whether this user is host (1) or not (0)
+  const isHost = parseInt(params.get("host").toString());
 
   // Object to hold my positional data to send to server
   const myPositionData = {};
@@ -82,10 +89,11 @@ window.addEventListener("load", function(event) {
   let player2_added = false;
   let player3_added = false;
   let player4_added = false;
-  let maxPlayers = 2;
+  let maxPlayers = 4;
 
   let localWinnerInfo = {};
 
+  let stopWaiting = false; // bool to know when to stop flashing 'waiting for players'
   let beginGame = false;
   let timeToStart = 5;
   let gameStarted = false;
@@ -93,6 +101,23 @@ window.addEventListener("load", function(event) {
   let youWin = false;
   let youLose = false;
   let sendWinMsg = false; 
+
+  let playersMaxed = false;
+
+  playButton.addEventListener("click", (event) => { // when "Start Game" button is clicked
+    // start race by artificially making the code believe that 4 players have joined
+    playerCount = maxPlayers;
+    startRaceRequest = {
+      roomId: joinRoomRequest.id
+    }
+    // send start race message to all other players
+    socket.emit("startRaceRequest", startRaceRequest); 
+  });
+  // handle start race message, when received
+  socket.on("startRaceResponse", (startRaceResponse) => {
+
+    playerCount = maxPlayers;
+  });
 
   loop = function() {
 
@@ -172,7 +197,7 @@ window.addEventListener("load", function(event) {
     context.fillStyle = "#FFFFFF";
     context.fillText(gameIdString, 5, 15);
 
-    // For flashing text... only setInterval if not yet set
+    // for flashing text... only setInterval if not yet set
     if (!intSet && (playerCount < maxPlayers))
     {
       intervalId = setInterval(() => { 
@@ -190,20 +215,52 @@ window.addEventListener("load", function(event) {
     // If there are more than one player:
     if (playerPositionData_2.id && !player2_added)
     {
+      playerCount++;
+      player2_added = true;
+      // Once there is more than one player, show and enable playButton ONLY FOR HOST
+      if (isHost)
+      {
+        playButton.style.opacity = 1;
+        playButton.disabled = false;
+      }
+    }
+    if (playerPositionData_3.id && !player3_added)
+    {
+      playerCount++;
+      player3_added = true;
+    }
+    if (playerPositionData_4.id && !player4_added)
+    {
+      playerCount++;
+      player4_added = true;
+    }
+    const playerCountString = "(" + playerCount.toString() + "/" + maxPlayers + ")";
+    if (!beginGame && !gameStarted)
+    {
+      // Only show the waiting for players text if the game hasn't been started yet
+      context.fillText(playerJoinString + playerCountString, 5, textPosInt); 
+    } 
+    if (playerCount === maxPlayers && !playersMaxed)
+    {
+      playButton.style.opacity = 0;
+      playButton.disabled = true;
+      beginGame = true;
+      stopWaiting = true;
+      playersMaxed = true;
+    }
+    if (stopWaiting)
+    {
+      console.log("Entered");
+      console.log(stopWaiting);
       clearInterval(intervalId);
       intSet = false;
       textPosInt = 25;
-      playerJoinString = "Players have joined!";
-      playerCount++;
-      player2_added = true;
+      playerJoinString = "Game ready! ";
+      stopWaiting = false;
     }
-    context.fillText(playerJoinString, 5, textPosInt); 
-    const playerCountString = "(" + playerCount.toString() + "/" + maxPlayers + ")"; 
-    context.fillText(playerCountString, 100, textPosInt);
-
-    if (playerCount === maxPlayers && !gameStarted)
-    {
-      beginGame = true;
+    
+    if (beginGame && !gameStarted)
+    { 
       if (!intSet)
       {
         intervalId = setInterval(() => {
@@ -211,7 +268,7 @@ window.addEventListener("load", function(event) {
         }, 1000);
         intSet = true;
       }
-      context.fillText("Game Starting In... " + timeToStart, 5, 35);
+      context.fillText("Game Starting In... " + timeToStart, 5, 25);
     }
     if (timeToStart === 0)
     {
@@ -228,10 +285,10 @@ window.addEventListener("load", function(event) {
       rectangle.y = 180 - 16 - 32;
       rectangle.y_velocity = 0;
     }
-    // Code that constantly runs once the game has started
+    // Code that constantly runs once the game has started, before it ends
     if (gameStarted && !endReached)
     {
-      context.fillText("Go! Reach the end first to win!", 5, 35);
+      context.fillText("Go! Reach the end first to win!", 5, 25);
       // Write 'END' below endzone
       context.fillText("END", 320 - 27, 180 - 4);
       // Draw endzone
@@ -247,17 +304,17 @@ window.addEventListener("load", function(event) {
     }
     if (endReached && youWin)
     {
-      context.fillText("Finish!", 5, 35);
-      context.fillText("You Win!", 5, 45);
+      context.fillText("You Win!", 5, 25);
       sendWinMsg = true;
       menuButton.style.opacity = 1; // make return to menu button visible
+      menuButton.disabled = false; // enable its functionality
     }
     if (endReached && youLose)
     {
-      context.fillText("Finish!", 5, 35);
       context.fillText("Player with socket id: " +
-      localWinnerInfo.socketId + " won!", 5, 45);
+      localWinnerInfo.socketId + " won!", 5, 25);
       menuButton.style.opacity = 1; // make return to menu button visible
+      menuButton.disabled = false; // enable its functionality
     }
     if (sendWinMsg)
     {
