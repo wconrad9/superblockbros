@@ -1,9 +1,11 @@
 // Frank Poth 08/13/2017
 // Add event listener for if page is loaded
 window.addEventListener("load", function(event) {
-  var context, controller, rectangle, loop;
+  var context, menuButton, controller, rectangle, loop;
 
   context = document.querySelector("canvas").getContext("2d");
+  menuButton = document.getElementById("menuButton");
+  //menuButton.style.opacity = "0";
 
   context.canvas.height = 180;
   context.canvas.width = 320;
@@ -248,12 +250,14 @@ window.addEventListener("load", function(event) {
       context.fillText("Finish!", 5, 35);
       context.fillText("You Win!", 5, 45);
       sendWinMsg = true;
+      menuButton.style.opacity = 1; // make return to menu button visible
     }
     if (endReached && youLose)
     {
       context.fillText("Finish!", 5, 35);
       context.fillText("Player with socket id: " +
       localWinnerInfo.socketId + " won!", 5, 45);
+      menuButton.style.opacity = 1; // make return to menu button visible
     }
     if (sendWinMsg)
     {

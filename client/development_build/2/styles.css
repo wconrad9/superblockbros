@@ -32,3 +32,22 @@ canvas {
   width: 1000px;
 
 }
+
+#menuButton {
+  opacity: 0;
+  padding: 10px 24px;
+  font-size: 16px;
+  text-align: center;
+  width: 250px;
+  border: none;
+  margin-left: 748px;
+}
+
+#menuButton:hover {
+  background-color: #9C9C9C;
+  cursor: pointer;
+}
+
+#menuButton:active {
+  background-color: #797979;
+}
