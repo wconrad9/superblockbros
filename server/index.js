@@ -22,6 +22,22 @@ io.sockets.on("connection", socket => {
     socket.emit("roomCheckResponse", roomCheckResponse);
   });
 
+  socket.on("gameStartedRequest", gameStartedRequest => {
+    const fwdedGameStartedRequest = { ...gameStartedRequest };
+    // check if the game in the requested room has already started
+    socket
+      .to(fwdedGameStartedRequest.roomId)
+      .emit("gameStartedRequest", fwdedGameStartedRequest);
+  });
+
+  socket.on("gameStartedResponse", gameStartedResponse => {
+    const fwdedGameStartedResponse = { ...gameStartedResponse };
+    // fwd response to the client who initially made the request
+    socket
+      .to(fwdedGameStartedResponse.sockId)
+      .emit("gameStartedResponse", fwdedGameStartedResponse);
+  });
+
   socket.on("startRaceRequest", startRaceRequest => {
     console.log("startRaceRequest received");
     const startRaceResponse = { ...startRaceRequest };
@@ -35,12 +51,38 @@ io.sockets.on("connection", socket => {
     socket.leave(leaveRoomRequest.id);
   });
 
-  socket.on("playerPosition", playerPositionData => {
-    const updatedPlayerPositionData = { ...playerPositionData };
-    updatedPlayerPositionData.id = socket.id;
-    socket
-      .to(playerPositionData.roomId)
-      .emit("playerPosition", updatedPlayerPositionData);
+  socket.on("playerData", playerData => {
+    const updatedPlayerData = { ...playerData };
+    updatedPlayerData.id = socket.id; // to get a unique identifier for each player
+    socket.to(playerData.roomId).emit("playerData", updatedPlayerData);
+  });
+
+  socket.on("checkConnections", playerConnections => {
+    // const currentConnections = { ...playerConnections };
+    const currentConnections = {
+      player2_connected: false,
+      player3_connected: false,
+      player4_connected: false
+    };
+    const roomObj = io.sockets.adapter.rooms[playerConnections.roomId];
+    if (roomObj) {
+      const player2Socket = playerConnections.player2_sockId;
+      const player3Socket = playerConnections.player3_sockId;
+      const player4Socket = playerConnections.player4_sockId;
+      const socketListObj = roomObj.sockets;
+      const sockIdArray = Object.keys(socketListObj);
+      currentConnections.player2_connected = sockIdArray.includes(
+        player2Socket
+      );
+      currentConnections.player3_connected = sockIdArray.includes(
+        player3Socket
+      );
+      currentConnections.player4_connected = sockIdArray.includes(
+        player4Socket
+      );
+    }
+    // console.log(currentConnections);
+    socket.emit("currentConnections", currentConnections);
   });
 
   socket.on("winMsg", winnerInfo => {

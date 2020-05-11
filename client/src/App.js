@@ -115,6 +115,12 @@ const App = () => {
     return tentativeId;
   };
 
+  const returnToPrevMode = () => {
+    let temp = mode;
+    setMode(prevMode);
+    setPrevMode(temp);
+  };
+
   const playButton = (
     <Button
       type="button"
@@ -145,7 +151,12 @@ const App = () => {
         createdGame.username = username;
         const queryParam = createdGame.id.toString();
         const urlString =
-          "http://localhost:3001/index.html?id=" + queryParam + "&host=1"; // host=1 at end to indicate that this person is the host
+          "http://localhost:3001/index.html?id=" +
+          queryParam +
+          "&host=1&name=" +
+          username;
+        // host=1 to indicate that this person is the host
+        // name=username to pass playername to game
         setUrl(urlString);
         setCurrentGame(createdGame);
         // create a room with the game's Id
@@ -214,19 +225,17 @@ const App = () => {
     </Button>
   );
 
-  const backButton = (
-    <Button
-      type="button"
-      name="back"
-      onClick={() => {
-        let temp = mode;
-        setMode(prevMode);
-        setPrevMode(temp);
-      }}
-    >
-      Back
-    </Button>
-  );
+  // const backButton = (
+  //   <Button
+  //     type="button"
+  //     name="back"
+  //     onClick={() => {
+  //       returnToPrevMode();
+  //     }}
+  //   >
+  //     Back
+  //   </Button>
+  // );
 
   const mainMenuScene = (
     <div>
@@ -311,8 +320,12 @@ const App = () => {
     <div>
       <p>Your Player Name: {username}</p>
       <p>Enter a valid Game ID to join a game:</p>
-      <JoinInput username={username} socket={socket} />
-      {backButton}
+      <JoinInput
+        username={username}
+        socket={socket}
+        returnToPrevMode={returnToPrevMode}
+      />
+      {/* backButton */}
     </div>
   );
 
@@ -339,19 +352,19 @@ const App = () => {
         either host or join a game.
       </Instructions>
       <Instructions>
-        HOSTING INSTRUCTIONS: If you choose to host, you will be taken to
+        HOSTING INSTRUCTIONS: If you click 'host game', you will be taken to
         another screen where you are shown the ID of your hosted game. You need
         to give this ID to your friends for them to join your hosted game.
       </Instructions>
       <Instructions>
-        In the 'Waiting Area', A button labeled 'Start Game' will appear once
-        least one other player has joined, that you can click on at any time to
-        start the game.
+        In the 'Waiting Area', A button to start the game will appear once at
+        least one other player has joined. A game will auto-start if there are 4
+        players in it (including the host).
       </Instructions>
       <Instructions>
-        JOINING INSTRUCTIONS: If you want to join, you will be taken to a screen
-        where you can enter IDs and join games. (NOTE: The 'Join Game' button
-        will only be shown if you've entered a valid ID).
+        JOINING INSTRUCTIONS: If you click 'join game', you will be taken to a
+        screen where you can enter game IDs and join games. (NOTE: The 'Join
+        Game' button will only be shown if you've entered a valid ID).
       </Instructions>
       <Instructions>We hope you enjoy Super Block Bros.</Instructions>
       {returnButton}

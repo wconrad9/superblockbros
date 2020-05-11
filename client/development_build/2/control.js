@@ -9,8 +9,8 @@ window.addEventListener("load", function(event) {
 
   menuButton.disabled = true; // disable menuButton functionality until game ends
   playButton.disabled = true; // disable playButton functionality until at least 2 players exist
-  // get query params
-  const params = new URLSearchParams(window.location.search);
+
+  const params = new URLSearchParams(window.location.search); // get query params
 
   context.canvas.height = 180;
   context.canvas.width = 320;
@@ -61,22 +61,22 @@ window.addEventListener("load", function(event) {
     id: params.get("id").toString()
   }
   socket.emit("joinRoom", joinRoomRequest);
-  // To display Game ID in-game
+  // To display Game ID in top-left of screen
   const gameIdString = "Game ID: " + joinRoomRequest.id;
 
   // get whether this user is host (1) or not (0)
   const isHost = parseInt(params.get("host").toString());
 
-  // Object to hold my positional data to send to server
-  const myPositionData = {};
+  // Object to hold my data to send to server
+  const myData = {};
   /* Objects to hold other players' positional data received
     from server */ 
-  const playerPositionData_2 = {};
-  const playerPositionData_3 = {};
-  const playerPositionData_4 = {};
-  playerPositionData_2.id = null;
-  playerPositionData_3.id = null;
-  playerPositionData_4.id = null;
+  const playerData_2 = {};
+  const playerData_3 = {};
+  const playerData_4 = {};
+  playerData_2.id = null;
+  playerData_3.id = null;
+  playerData_4.id = null;
 
   // Variables for flashing text
   let intSet = false;
@@ -85,14 +85,20 @@ window.addEventListener("load", function(event) {
 
   // Variables to hold & keep track of current playerCount as well as gameState:
   let playerCount = 1;
-  let playerJoinString = "Waiting for players... "
   let player2_added = false;
   let player3_added = false;
   let player4_added = false;
   let maxPlayers = 4;
 
+  let connData = {}; // object to keep track of players still connected
+  let connEventString = ""; // string to hold message to show when a player connects/disconnects
+
   let localWinnerInfo = {};
 
+  // get playerName from query parameters in url
+  let playerName = params.get("name").toString();
+
+  let startButtonPressed = false;
   let stopWaiting = false; // bool to know when to stop flashing 'waiting for players'
   let beginGame = false;
   let timeToStart = 5;
@@ -102,22 +108,37 @@ window.addEventListener("load", function(event) {
   let youLose = false;
   let sendWinMsg = false; 
 
-  let playersMaxed = false;
+  //let playersMaxed = false;
 
   playButton.addEventListener("click", (event) => { // when "Start Game" button is clicked
     // start race by artificially making the code believe that 4 players have joined
-    playerCount = maxPlayers;
+    startButtonPressed = true;
     startRaceRequest = {
       roomId: joinRoomRequest.id
     }
-    // send start race message to all other players
+    // send start race message to server, which will send it to all other players
     socket.emit("startRaceRequest", startRaceRequest); 
   });
   // handle start race message, when received
-  socket.on("startRaceResponse", (startRaceResponse) => {
-
-    playerCount = maxPlayers;
+  socket.on("startRaceResponse", (startRaceResponse) => { 
+    startButtonPressed = true;
   });
+  // add handler for gameStartedRequest messages:
+  // if (isHost) // was previously only for host, but this introduced some unforeseen issues
+  // {
+  socket.on("gameStartedRequest", (gameStartedRequest) => {
+    const gameStartedResponse = { ...gameStartedRequest };
+    if (startButtonPressed)
+    {
+      gameStartedResponse.gameStarted = true;
+    }
+    else
+    {
+      gameStartedResponse.gameStarted = false;
+    }
+    socket.emit("gameStartedResponse", gameStartedResponse);
+  });
+  // }
 
   loop = function() {
 
@@ -157,7 +178,6 @@ window.addEventListener("load", function(event) {
       rectangle.y = 180 - 16 - 32;
       rectangle.y_velocity = 0;
     }
-    
     // If game not started, player can go off left edge
     // and come out the right edge.
     if (!gameStarted)
@@ -195,79 +215,138 @@ window.addEventListener("load", function(event) {
 
     context.font = "10px Arial";
     context.fillStyle = "#FFFFFF";
+    context.textAlign = "left";
     context.fillText(gameIdString, 5, 15);
 
     // for flashing text... only setInterval if not yet set
     if (!intSet && (playerCount < maxPlayers))
     {
       intervalId = setInterval(() => { 
-        if (textPosInt === 25)
-        {
-          textPosInt = 10000;
-          //console.log(textPosInt);
+        if (textPosInt === 25) {
+          textPosInt = 25000;
         }
-        else {
+        else if (textPosInt === 35) {
+          textPosInt = 35000;
+        }
+        else if (textPosInt === 25000) {
           textPosInt = 25;
+        }
+        else if (textPosInt === 35000) {
+          textPosInt = 35;
         }
       }, 500);
       intSet = true;
     }
-    // If there are more than one player:
-    if (playerPositionData_2.id && !player2_added)
+    // Hide playButton if no other players in game...
+    if (playerCount === 1 && isHost)
+    {
+      playButton.style.opacity = 0;
+      playButton.disabled = true;
+    }
+    // Once there is more than one player, show and enable playButton ONLY FOR HOST
+    // until game is started
+    if (playerCount > 1 && isHost && !beginGame && !gameStarted)
+    {
+      playButton.style.opacity = 1;
+      playButton.disabled = false;
+      playButton.innerHTML = "Start Game with " + playerCount + " Players";
+    }
+    // Incrementing playerCount as players come in
+    if (playerData_2.id && !player2_added)
     {
       playerCount++;
       player2_added = true;
-      // Once there is more than one player, show and enable playButton ONLY FOR HOST
-      if (isHost)
-      {
-        playButton.style.opacity = 1;
-        playButton.disabled = false;
-      }
+      connEventString = playerData_2.name + " has joined!";
     }
-    if (playerPositionData_3.id && !player3_added)
+    if (playerData_3.id && !player3_added)
     {
       playerCount++;
       player3_added = true;
+      connEventString = playerData_3.name + " has joined!";
     }
-    if (playerPositionData_4.id && !player4_added)
+    if (playerData_4.id && !player4_added)
     {
       playerCount++;
       player4_added = true;
+      connEventString = playerData_4.name + " has joined!";
+    }
+    if (connData.player2_connected)
+    {
+      player2_added = true;
+    }
+    /* checking if players have disconnected from the game */
+    if (player2_added && !connData.player2_connected)
+    {
+      console.log(player2_added);
+      console.log("reached!");
+      console.log(connData.player2_connected);
+      player2_added = false;
+      playerCount--;
+      connEventString = playerData_2.name + " disconnected";
+    }
+    if (!(connData.player3_connected) && player3_added)
+    {
+      player3_added = false;
+      playerCount--;
+      connEventString = playerData_3.name + " disconnected";
+    }
+    if (!(connData.player4_connected) && player4_added)
+    {
+      player4_added = false;
+      playerCount--;
+      connEventString = playerData_4.name + " disconnected";
     }
     const playerCountString = "(" + playerCount.toString() + "/" + maxPlayers + ")";
-    if (!beginGame && !gameStarted)
-    {
-      // Only show the waiting for players text if the game hasn't been started yet
+    // Only show the waiting for players text if the game hasn't been started yet
+    if (!beginGame && !gameStarted) 
+    { 
+      let playerJoinString = "";
+      // show different text, depending on if the game if full or not:
+      if (playerCount < maxPlayers)
+      {
+        playerJoinString = "Waiting for players... ";
+      }
+      else
+      {
+        playerJoinString = "Game is full! Waiting for host to start... "
+      }
+      // display last connection event (joining/disconnecting players)
+      context.fillText(connEventString, 5, 25);
+      if (connEventString && (textPosInt != 35) && (textPosInt != 35000))
+      {
+        textPosInt = 35;
+      }
+      // display current waiting room state and no of players
       context.fillText(playerJoinString + playerCountString, 5, textPosInt); 
+      
     } 
-    if (playerCount === maxPlayers && !playersMaxed)
+    if (startButtonPressed && !stopWaiting)
     {
       playButton.style.opacity = 0;
       playButton.disabled = true;
       beginGame = true;
       stopWaiting = true;
-      playersMaxed = true;
+      if (stopWaiting)
+      {
+        clearInterval(intervalId);
+        intSet = false;
+        textPosInt = 25;
+      }
     }
-    if (stopWaiting)
-    {
-      console.log("Entered");
-      console.log(stopWaiting);
-      clearInterval(intervalId);
-      intSet = false;
-      textPosInt = 25;
-      playerJoinString = "Game ready! ";
-      stopWaiting = false;
-    }
-    
     if (beginGame && !gameStarted)
     { 
       if (!intSet)
       {
+        // Start the countdown
         intervalId = setInterval(() => {
           timeToStart--;
         }, 1000);
         intSet = true;
+        // delete last connection event
+        connEventString = "";
       }
+      console.log(intSet)
+      console.log(timeToStart);
       context.fillText("Game Starting In... " + timeToStart, 5, 25);
     }
     if (timeToStart === 0)
@@ -330,49 +409,49 @@ window.addEventListener("load", function(event) {
       youLose = true;
     });
 
-    /* Sending my position to the server */
-    myPositionData.x = rectangle.x;
-    myPositionData.y = rectangle.y;
-    myPositionData.jumping = rectangle.jumping;
-    myPositionData.roomId = joinRoomRequest.id;
-    socket.emit("playerPosition", myPositionData);
+    /* Sending my data (position, playerName, roomId) to the server */
+    myData.x = rectangle.x;
+    myData.y = rectangle.y;
+    myData.jumping = rectangle.jumping;
+    myData.name = playerName;
+    myData.roomId = joinRoomRequest.id;
+    socket.emit("playerData", myData);
+    
+    /* Changing text font/formatting for drawing playernames */
+    context.textAlign = "center";
+    let playerConnections = {
+      roomId: joinRoomRequest.id,
+      player2_sockId: playerData_2.id,
+      player3_sockId: playerData_3.id,
+      player4_sockId: playerData_4.id
+    };
+    socket.emit("checkConnections", playerConnections);
+    /* Drawing other players' rectangles and playerNames */
 
-    /* Receiving other players' positions from the server */
-    socket.on("playerPosition", (playerPositionData) => {
-      if (playerPositionData_2.id === null || 
-          playerPositionData_2.id === playerPositionData.id)
-      {
-        playerPositionData_2.id = playerPositionData.id;
-        playerPositionData_2.x = playerPositionData.x;
-        playerPositionData_2.y = playerPositionData.y;
-        playerPositionData_2.jumping = playerPositionData.jumping;
-      }
-      else if (playerPositionData_3.id === null || 
-        playerPositionData_3.id === playerPositionData.id)
-      {
-        playerPositionData_3.id = playerPositionData.id;
-        playerPositionData_3.x = playerPositionData.x;
-        playerPositionData_3.y = playerPositionData.y;
-        playerPositionData_3.jumping = playerPositionData.jumping;
-      }
-      else if (playerPositionData_4.id === null || 
-        playerPositionData_4.id === playerPositionData.id)
-      {
-        playerPositionData_4.id = playerPositionData.id;
-        playerPositionData_4.x = playerPositionData.x;
-        playerPositionData_4.y = playerPositionData.y;
-        playerPositionData_4.jumping = playerPositionData.jumping;
-      }
-    });
-    drawRect("#FF0000", playerPositionData_2.x, playerPositionData_2.y);
-    drawRect("#FF0000", playerPositionData_3.x, playerPositionData_3.y);
-    drawRect("#FF0000", playerPositionData_4.x, playerPositionData_4.y);
+    if (player2_added && connData.player2_connected)
+    {
+      drawRect("#FF0000", playerData_2.x, playerData_2.y);
+      context.fillText(playerData_2.name, playerData_2.x + 15, playerData_2.y - 8);
+    }
+    if (player3_added && connData.player3_connected)
+    {
+      drawRect("#FF0000", playerData_3.x, playerData_3.y);
+      context.fillText(playerData_3.name, playerData_3.x + 15, playerData_3.y - 8);
+    }
+    if (player4_added && connData.player4_connected)
+    {
+      drawRect("#FF0000", playerData_4.x, playerData_4.y);
+      context.fillText(playerData_4.name, playerData_4.x + 15, playerData_4.y - 8);
+    }
     /* Drawing my rectangle on the screen last so it's on top */
     drawRect("#00FFFF", rectangle.x, rectangle.y);
+    /* Drawing my playerName over my rectangle */
+    context.fillText(playerName, rectangle.x + 15, rectangle.y - 8);
 
     // call update when the browser is ready to draw again
     window.requestAnimationFrame(loop);
   };
+
   window.addEventListener("keydown", controller.keyListener)
   window.addEventListener("keyup", controller.keyListener);
   window.requestAnimationFrame(loop);
@@ -380,8 +459,46 @@ window.addEventListener("load", function(event) {
   const drawRect = (color, xPos, yPos) => {
     context.fillStyle = color; // hex for light blue
     context.beginPath();
-    context.rect(xPos, yPos, rectangle.width, rectangle.height);
+    context.rect(xPos, yPos, rectangle.width, rectangle.height); // width & height are both 32
     context.fill();
   };
+  /* received socket message handlers */
+  /* 1. receiving other players' positions from the server */
+  socket.on("playerData", (playerData) => {
+    if (playerData_2.id === null ||
+        !connData.player2_connected ||
+        playerData_2.id === playerData.id)
+    {
+      playerData_2.id = playerData.id;
+      playerData_2.x = playerData.x;
+      playerData_2.y = playerData.y;
+      playerData_2.jumping = playerData.jumping;
+      playerData_2.name = playerData.name;
+    }
+    else if (playerData_3.id === null || 
+             !connData.player3_connected ||
+             playerData_3.id === playerData.id)
+    {
+      playerData_3.id = playerData.id;
+      playerData_3.x = playerData.x;
+      playerData_3.y = playerData.y;
+      playerData_3.jumping = playerData.jumping;
+      playerData_3.name = playerData.name;
+    }
+    else if (playerData_4.id === null ||
+             !connData.player4_connected || 
+             playerData_4.id === playerData.id)
+    {
+      playerData_4.id = playerData.id;
+      playerData_4.x = playerData.x;
+      playerData_4.y = playerData.y;
+      playerData_4.jumping = playerData.jumping;
+      playerData_4.name = playerData.name;
+    }
+  });
+  /* 2. receiving whether players are still connected to the game */
+  socket.on("currentConnections", currentConnections => {
+    connData = { ...currentConnections };
+  });
 });
 
