@@ -187,14 +187,18 @@ window.addEventListener("load", function(event) {
     {
       rectangle.x_velocity += 0.5;
     }
-
-
+    
     rectangle.y_velocity += 0.75; // gravity
     rectangle.x += rectangle.x_velocity;
     rectangle.y += rectangle.y_velocity;
     rectangle.x_velocity *= 0.9;// friction
     rectangle.y_velocity *= 0.9;// friction
     //console.log(rectangle.x_velocity);
+
+    if (rectangle.y_velocity > 0) // If rectangle falls off a platform
+    {
+      rectangle.jumping = true;
+    }
 
     platform1.x += platform1.x_velocity;
 
@@ -224,31 +228,13 @@ window.addEventListener("load", function(event) {
 
       console.log("rectangle.y above: " + rectangle.y);
       console.log("platform.y above: " + (platform1.y + platform1.height));
-        //we want the player to land on the platform and stay on top
-        if (rectangle.y + rectangle.height > platform1.y)
-          {
-          rectangle.jumping = false;
-          rectangle.y = platform1.y - rectangle.height;
-          rectangle.y_velocity = 0;
-        }
-
-    }
-
-    // player in between platform x limits; below
-    if(rectangle.x + rectangle.width > platform1.x && rectangle.x < platform1.x + platform1.width && rectangle.y > platform1.y + platform1.height)
-    {
-
-      console.log("rectangle.y below: " + rectangle.y);
-      console.log("platform.y below: " + (platform1.y + platform1.height));
-
-        if(rectangle.y > platform1.y + platform1.height && rectangle.jumping) {
-
-          console.log("hit bottom");
-
-          rectangle.y = platform1.y + platform1.height;
-          rectangle.y_velocity = 0;
-          // rectangle.jumping = false;
-        }
+      //we want the player to land on the platform and stay on top
+      if (rectangle.y + rectangle.height > platform1.y && rectangle.y_velocity >= 0)
+        {
+        rectangle.jumping = false;
+        rectangle.y = platform1.y - rectangle.height;
+        rectangle.y_velocity = 0;
+      }
 
     }
 
@@ -258,34 +244,15 @@ window.addEventListener("load", function(event) {
 
       console.log("rectangle.y above: " + rectangle.y);
       console.log("platform.y above: " + (platform2.y + platform2.height));
-        //we want the player to land on the platform and stay on top
-        if (rectangle.y + rectangle.height > platform2.y)
-          {
-          rectangle.jumping = false;
-          rectangle.y = platform2.y - rectangle.height;
-          rectangle.y_velocity = 0;
-        }
+      //we want the player to land on the platform and stay on top
+      if (rectangle.y + rectangle.height > platform2.y && rectangle.y_velocity >= 0)
+        {
+        rectangle.jumping = false;
+        rectangle.y = platform2.y - rectangle.height;
+        rectangle.y_velocity = 0;
+      }
 
     }
-
-    // player in between platform x limits; below
-    if(rectangle.x + rectangle.width > platform2.x && rectangle.x < platform2.x + platform2.width && rectangle.y > platform2.y + platform2.height)
-    {
-
-      console.log("rectangle.y below: " + rectangle.y);
-      console.log("platform.y below: " + (platform2.y + platform2.height));
-
-        if(rectangle.y > platform2.y + platform2.height && rectangle.jumping) {
-
-          console.log("hit bottom");
-
-          rectangle.y = platform2.y + platform2.height;
-          rectangle.y_velocity = 0;
-          // rectangle.jumping = false;
-        }
-
-    }
-
 
     // player in between platform x limits; above
     if(rectangle.x + rectangle.width > platform3.x && rectangle.x < platform3.x + platform3.width && rectangle.y < platform3.y + platform3.height)
@@ -293,34 +260,15 @@ window.addEventListener("load", function(event) {
 
       console.log("rectangle.y above: " + rectangle.y);
       console.log("platform.y above: " + (platform3.y + platform3.height));
-        //we want the player to land on the platform and stay on top
-        if (rectangle.y + rectangle.height > platform3.y)
-          {
-          rectangle.jumping = false;
-          rectangle.y = platform3.y - rectangle.height;
-          rectangle.y_velocity = 0;
-        }
+      //we want the player to land on the platform and stay on top
+      if (rectangle.y + rectangle.height > platform3.y && rectangle.y_velocity >= 0)
+        {
+        rectangle.jumping = false;
+        rectangle.y = platform3.y - rectangle.height;
+        rectangle.y_velocity = 0;
+      }
 
     }
-
-    // player in between platform x limits; below
-    if(rectangle.x + rectangle.width > platform3.x && rectangle.x < platform3.x + platform3.width && rectangle.y > platform3.y + platform3.height)
-    {
-
-      console.log("rectangle.y below: " + rectangle.y);
-      console.log("platform.y below: " + (platform3.y + platform3.height));
-
-        if(rectangle.y > platform3.y + platform3.height && rectangle.jumping) {
-
-          console.log("hit bottom");
-
-          rectangle.y = platform3.y + platform3.height;
-          rectangle.y_velocity = 0;
-          // rectangle.jumping = false;
-        }
-
-    }
-
 
     // If game not started, player can go off left edge
     // and come out the right edge.
@@ -622,13 +570,11 @@ window.addEventListener("load", function(event) {
     context.fillText(playerName, rectangle.x + 15, rectangle.y - 8);
 
     /* Drawing 1st platform */
-    drawPlatform1("#FFFFFF", platform1.x, platform1.y);
-
+    drawPlatform("#FFFFFF", platform1.x, platform1.y);
     /* Drawing 2nd platform */
-    drawPlatform2("#FFFFFF", platform2.x, platform2.y);
-
+    drawPlatform("#FFFFFF", platform2.x, platform2.y);
     /* Drawing 3rd platform */
-    drawPlatform3("#FFFFFF", platform3.x, platform3.y);
+    drawPlatform("#FFFFFF", platform3.x, platform3.y);
 
     // call update when the browser is ready to draw again
     window.requestAnimationFrame(loop);
@@ -644,25 +590,10 @@ window.addEventListener("load", function(event) {
     context.rect(xPos, yPos, rectangle.width, rectangle.height); // width & height are both 32
     context.fill();
   };
-
-  const drawPlatform1 = (color, xPos, yPos) => {
+  const drawPlatform = (color, xPos, yPos) => {
     context.fillStyle = color; // hex for white
     context.beginPath();
     context.rect(xPos, yPos, platform1.width, platform1.height);
-    context.fill();
-  };
-
-  const drawPlatform2 = (color, xPos, yPos) => {
-    context.fillStyle = color; // hex for white
-    context.beginPath();
-    context.rect(xPos, yPos, platform2.width, platform2.height);
-    context.fill();
-  };
-
-  const drawPlatform3 = (color, xPos, yPos) => {
-    context.fillStyle = color; // hex for white
-    context.beginPath();
-    context.rect(xPos, yPos, platform3.width, platform3.height);
     context.fill();
   };
 
