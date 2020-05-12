@@ -1,7 +1,7 @@
 // Frank Poth 08/13/2017
 // Add event listener for if page is loaded
 window.addEventListener("load", function(event) {
-  var context, menuButton, playButton, controller, rectangle, loop;
+  var context, menuButton, playButton, controller, rectangle, platform, loop;
 
   context = document.querySelector("canvas").getContext("2d");
   menuButton = document.getElementById("menuButton");
@@ -12,13 +12,44 @@ window.addEventListener("load", function(event) {
 
   const params = new URLSearchParams(window.location.search); // get query params
 
-  context.canvas.height = 180;
-  context.canvas.width = 320;
+  context.canvas.height = 720;
+  context.canvas.width = 1280;
 
   // context.canvas.style.width = "1280px";
   // context.canvas.style.height = "720px";
 
-  rectangle = 
+  platform1 =
+  {
+  height: 16,
+  width: 64,
+  x: 144,   //center of the canvas
+  x_velocity: 5,
+  y: context.canvas.height - 90,
+  y_velocity: 0
+  }
+
+  platform2 =
+  {
+  height: 16,
+  width: 64,
+  x: 288,   //center of the canvas
+  x_velocity: 5,
+  y: context.canvas.height - 180,
+  y_velocity: 0
+  }
+
+  platform3 =
+  {
+  height: 16,
+  width: 64,
+  x: 1200,   //center of the canvas
+  x_velocity: 0,
+  y: context.canvas.height - 270,
+  y_velocity: -2
+  }
+
+
+  rectangle =
   {
     height:32,
     jumping:true,
@@ -70,7 +101,7 @@ window.addEventListener("load", function(event) {
   // Object to hold my data to send to server
   const myData = {};
   /* Objects to hold other players' positional data received
-    from server */ 
+    from server */
   const playerData_2 = {};
   const playerData_3 = {};
   const playerData_4 = {};
@@ -106,7 +137,7 @@ window.addEventListener("load", function(event) {
   let endReached = false;
   let youWin = false;
   let youLose = false;
-  let sendWinMsg = false; 
+  let sendWinMsg = false;
 
   //let playersMaxed = false;
 
@@ -117,10 +148,10 @@ window.addEventListener("load", function(event) {
       roomId: joinRoomRequest.id
     }
     // send start race message to server, which will send it to all other players
-    socket.emit("startRaceRequest", startRaceRequest); 
+    socket.emit("startRaceRequest", startRaceRequest);
   });
   // handle start race message, when received
-  socket.on("startRaceResponse", (startRaceResponse) => { 
+  socket.on("startRaceResponse", (startRaceResponse) => {
     startButtonPressed = true;
   });
   // add handler for gameStartedRequest messages:
@@ -142,26 +173,34 @@ window.addEventListener("load", function(event) {
 
   loop = function() {
 
-    if (controller.up && rectangle.jumping == false) 
+    if (controller.up && rectangle.jumping == false)
     {
       rectangle.y_velocity -= 20;
       rectangle.jumping = true;
     }
-    if (controller.left) 
+    if (controller.left)
     {
       rectangle.x_velocity -= 0.5;
     }
 
-    if (controller.right) 
+    if (controller.right)
     {
       rectangle.x_velocity += 0.5;
     }
-    rectangle.y_velocity += 0.75;// gravity
+
+
+    rectangle.y_velocity += 0.75; // gravity
     rectangle.x += rectangle.x_velocity;
     rectangle.y += rectangle.y_velocity;
     rectangle.x_velocity *= 0.9;// friction
     rectangle.y_velocity *= 0.9;// friction
     //console.log(rectangle.x_velocity);
+
+    platform1.x += platform1.x_velocity;
+
+    platform2.x += platform2.x_velocity;
+
+    platform3.y += platform3.y_velocity;
 
     if (Math.abs(rectangle.x_velocity) < 0.1)
     {
@@ -172,23 +211,142 @@ window.addEventListener("load", function(event) {
       rectangle.y_velocity = 0;
     }
     // if rectangle is falling below floor line
-    if (rectangle.y > 180 - 16 - 32) 
+    if (rectangle.y > context.canvas.height - 16 - rectangle.height)
     {
       rectangle.jumping = false;
-      rectangle.y = 180 - 16 - 32;
+      rectangle.y = context.canvas.height - 16 - 32;
       rectangle.y_velocity = 0;
     }
+
+    // player in between platform x limits; above
+    if(rectangle.x + rectangle.width > platform1.x && rectangle.x < platform1.x + platform1.width && rectangle.y < platform1.y + platform1.height)
+    {
+
+      console.log("rectangle.y above: " + rectangle.y);
+      console.log("platform.y above: " + (platform1.y + platform1.height));
+        //we want the player to land on the platform and stay on top
+        if (rectangle.y + rectangle.height > platform1.y)
+          {
+          rectangle.jumping = false;
+          rectangle.y = platform1.y - rectangle.height;
+          rectangle.y_velocity = 0;
+        }
+
+    }
+
+    // player in between platform x limits; below
+    if(rectangle.x + rectangle.width > platform1.x && rectangle.x < platform1.x + platform1.width && rectangle.y > platform1.y + platform1.height)
+    {
+
+      console.log("rectangle.y below: " + rectangle.y);
+      console.log("platform.y below: " + (platform1.y + platform1.height));
+
+        if(rectangle.y > platform1.y + platform1.height && rectangle.jumping) {
+
+          console.log("hit bottom");
+
+          rectangle.y = platform1.y + platform1.height;
+          rectangle.y_velocity = 0;
+          // rectangle.jumping = false;
+        }
+
+    }
+
+    // player in between platform x limits; above
+    if(rectangle.x + rectangle.width > platform2.x && rectangle.x < platform2.x + platform2.width && rectangle.y < platform2.y + platform2.height)
+    {
+
+      console.log("rectangle.y above: " + rectangle.y);
+      console.log("platform.y above: " + (platform2.y + platform2.height));
+        //we want the player to land on the platform and stay on top
+        if (rectangle.y + rectangle.height > platform2.y)
+          {
+          rectangle.jumping = false;
+          rectangle.y = platform2.y - rectangle.height;
+          rectangle.y_velocity = 0;
+        }
+
+    }
+
+    // player in between platform x limits; below
+    if(rectangle.x + rectangle.width > platform2.x && rectangle.x < platform2.x + platform2.width && rectangle.y > platform2.y + platform2.height)
+    {
+
+      console.log("rectangle.y below: " + rectangle.y);
+      console.log("platform.y below: " + (platform2.y + platform2.height));
+
+        if(rectangle.y > platform2.y + platform2.height && rectangle.jumping) {
+
+          console.log("hit bottom");
+
+          rectangle.y = platform2.y + platform2.height;
+          rectangle.y_velocity = 0;
+          // rectangle.jumping = false;
+        }
+
+    }
+
+
+    // player in between platform x limits; above
+    if(rectangle.x + rectangle.width > platform3.x && rectangle.x < platform3.x + platform3.width && rectangle.y < platform3.y + platform3.height)
+    {
+
+      console.log("rectangle.y above: " + rectangle.y);
+      console.log("platform.y above: " + (platform3.y + platform3.height));
+        //we want the player to land on the platform and stay on top
+        if (rectangle.y + rectangle.height > platform3.y)
+          {
+          rectangle.jumping = false;
+          rectangle.y = platform3.y - rectangle.height;
+          rectangle.y_velocity = 0;
+        }
+
+    }
+
+    // player in between platform x limits; below
+    if(rectangle.x + rectangle.width > platform3.x && rectangle.x < platform3.x + platform3.width && rectangle.y > platform3.y + platform3.height)
+    {
+
+      console.log("rectangle.y below: " + rectangle.y);
+      console.log("platform.y below: " + (platform3.y + platform3.height));
+
+        if(rectangle.y > platform3.y + platform3.height && rectangle.jumping) {
+
+          console.log("hit bottom");
+
+          rectangle.y = platform3.y + platform3.height;
+          rectangle.y_velocity = 0;
+          // rectangle.jumping = false;
+        }
+
+    }
+
+
     // If game not started, player can go off left edge
     // and come out the right edge.
     if (!gameStarted)
-    {    
+    {
       // if rectangle is going off the left of the screen
-      if (rectangle.x < -32) { 
-          rectangle.x = 320;
-      } 
-      else if (rectangle.x > 320) { // if rectangle goes past right boundary
+      if (rectangle.x < -32) {
+          rectangle.x = context.canvas.width;
+      }
+      else if (rectangle.x > context.canvas.width) { // if rectangle goes past right boundary
         rectangle.x = -32;
       }
+
+      // platforms should translate across screen repeatedly
+      if (platform1.x > context.canvas.width) {
+        platform1.x = -(platform1.width);
+      }
+
+      if (platform2.x > context.canvas.width) {
+        platform2.x = -(platform2.width);
+      }
+
+      if (platform3.y < 0) {
+        platform3.y = context.canvas.height;
+      }
+
     }
     // If game started, this is not allowed
     else if (gameStarted)
@@ -198,19 +356,34 @@ window.addEventListener("load", function(event) {
         rectangle.x = 0;
         rectangle.x_velocity = 0;
       }
-      else if (rectangle.x > (320 - 32)) 
-      { 
-        rectangle.x = 320 - 32;
+      else if (rectangle.x > (context.canvas.width - 32))
+      {
+        rectangle.x = context.canvas.width - 32;
       }
+
+      // platforms should translate across screen repeatedly
+      if (platform1.x > context.canvas.width) {
+        platform1.x = -(platform1.width);
+      }
+
+      if (platform2.x > context.canvas.width) {
+        platform2.x = -(platform2.width);
+      }
+
+      if (platform3.y < 0) {
+        platform3.y = context.canvas.height;
+      }
+
+
     }
     /* Drawing the level */
     context.fillStyle = "#202020";
-    context.fillRect(0, 0, 320, 180);// x, y, width, height
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height);// x, y, width, height
     context.strokeStyle = "#202830";
     context.lineWidth = 2;
     context.beginPath();
-    context.moveTo(0, 164);
-    context.lineTo(320, 164);
+    context.moveTo(0, context.canvas.height - 16);
+    context.lineTo(context.canvas.width, context.canvas.height - 16);
     context.stroke();
 
     context.font = "10px Arial";
@@ -221,7 +394,7 @@ window.addEventListener("load", function(event) {
     // for flashing text... only setInterval if not yet set
     if (!intSet && (playerCount < maxPlayers))
     {
-      intervalId = setInterval(() => { 
+      intervalId = setInterval(() => {
         if (textPosInt === 25) {
           textPosInt = 25000;
         }
@@ -298,8 +471,8 @@ window.addEventListener("load", function(event) {
     }
     const playerCountString = "(" + playerCount.toString() + "/" + maxPlayers + ")";
     // Only show the waiting for players text if the game hasn't been started yet
-    if (!beginGame && !gameStarted) 
-    { 
+    if (!beginGame && !gameStarted)
+    {
       let playerJoinString = "";
       // show different text, depending on if the game if full or not:
       if (playerCount < maxPlayers)
@@ -317,9 +490,9 @@ window.addEventListener("load", function(event) {
         textPosInt = 35;
       }
       // display current waiting room state and no of players
-      context.fillText(playerJoinString + playerCountString, 5, textPosInt); 
-      
-    } 
+      context.fillText(playerJoinString + playerCountString, 5, textPosInt);
+
+    }
     if (startButtonPressed && !stopWaiting)
     {
       playButton.style.opacity = 0;
@@ -334,7 +507,7 @@ window.addEventListener("load", function(event) {
       }
     }
     if (beginGame && !gameStarted)
-    { 
+    {
       if (!intSet)
       {
         // Start the countdown
@@ -361,7 +534,7 @@ window.addEventListener("load", function(event) {
       // set all players' positions to left end of screen
       rectangle.x = 5;
       rectangle.x_velocity = 0;
-      rectangle.y = 180 - 16 - 32;
+      rectangle.y = context.canvas.height - 16 - 32;
       rectangle.y_velocity = 0;
     }
     // Code that constantly runs once the game has started, before it ends
@@ -369,13 +542,13 @@ window.addEventListener("load", function(event) {
     {
       context.fillText("Go! Reach the end first to win!", 5, 25);
       // Write 'END' below endzone
-      context.fillText("END", 320 - 27, 180 - 4);
+      context.fillText("END", context.canvas.width - 27, 16 + 4);
       // Draw endzone
-      drawRect("#228B22", 320 - 32, 180 - 16 - 32);
+      drawRect("#228B22", context.canvas.width - 32, 16 + rectangle.height);
       context.fillStyle = "white";
       // if player reaches end
-      if (rectangle.x === 320 - 32 &&
-          rectangle.y === 180 - 16 - 32)
+      if (rectangle.x === context.canvas.width - 32 &&
+          rectangle.y === 16 + 32)
       {
         endReached = true;
         youWin = true;
@@ -416,7 +589,7 @@ window.addEventListener("load", function(event) {
     myData.name = playerName;
     myData.roomId = joinRoomRequest.id;
     socket.emit("playerData", myData);
-    
+
     /* Changing text font/formatting for drawing playernames */
     context.textAlign = "center";
     let playerConnections = {
@@ -448,6 +621,15 @@ window.addEventListener("load", function(event) {
     /* Drawing my playerName over my rectangle */
     context.fillText(playerName, rectangle.x + 15, rectangle.y - 8);
 
+    /* Drawing 1st platform */
+    drawPlatform1("#FFFFFF", platform1.x, platform1.y);
+
+    /* Drawing 2nd platform */
+    drawPlatform2("#FFFFFF", platform2.x, platform2.y);
+
+    /* Drawing 3rd platform */
+    drawPlatform3("#FFFFFF", platform3.x, platform3.y);
+
     // call update when the browser is ready to draw again
     window.requestAnimationFrame(loop);
   };
@@ -462,6 +644,28 @@ window.addEventListener("load", function(event) {
     context.rect(xPos, yPos, rectangle.width, rectangle.height); // width & height are both 32
     context.fill();
   };
+
+  const drawPlatform1 = (color, xPos, yPos) => {
+    context.fillStyle = color; // hex for white
+    context.beginPath();
+    context.rect(xPos, yPos, platform1.width, platform1.height);
+    context.fill();
+  };
+
+  const drawPlatform2 = (color, xPos, yPos) => {
+    context.fillStyle = color; // hex for white
+    context.beginPath();
+    context.rect(xPos, yPos, platform2.width, platform2.height);
+    context.fill();
+  };
+
+  const drawPlatform3 = (color, xPos, yPos) => {
+    context.fillStyle = color; // hex for white
+    context.beginPath();
+    context.rect(xPos, yPos, platform3.width, platform3.height);
+    context.fill();
+  };
+
   /* received socket message handlers */
   /* 1. receiving other players' positions from the server */
   socket.on("playerData", (playerData) => {
@@ -475,7 +679,7 @@ window.addEventListener("load", function(event) {
       playerData_2.jumping = playerData.jumping;
       playerData_2.name = playerData.name;
     }
-    else if (playerData_3.id === null || 
+    else if (playerData_3.id === null ||
              !connData.player3_connected ||
              playerData_3.id === playerData.id)
     {
@@ -486,7 +690,7 @@ window.addEventListener("load", function(event) {
       playerData_3.name = playerData.name;
     }
     else if (playerData_4.id === null ||
-             !connData.player4_connected || 
+             !connData.player4_connected ||
              playerData_4.id === playerData.id)
     {
       playerData_4.id = playerData.id;
@@ -501,4 +705,3 @@ window.addEventListener("load", function(event) {
     connData = { ...currentConnections };
   });
 });
-
