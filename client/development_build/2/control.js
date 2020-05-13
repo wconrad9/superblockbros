@@ -23,7 +23,7 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: 144,   //center of the canvas
+  x: 144,
   x_velocity: 2,
   y: context.canvas.height - 90,
   y_velocity: 0
@@ -33,7 +33,7 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: context.canvas.width - 144,   //center of the canvas
+  x: context.canvas.width - 144,
   x_velocity: -2,
   y: context.canvas.height - 180,
   y_velocity: 0
@@ -43,7 +43,7 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: 144,   //center of the canvas
+  x: 144,
   x_velocity: 2,
   y: context.canvas.height - 270,
   y_velocity: 0
@@ -53,7 +53,7 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: context.canvas.width - 144,   //center of the canvas
+  x: context.canvas.width - 144,
   x_velocity: -2,
   y: context.canvas.height - 360,
   y_velocity: 0
@@ -63,7 +63,7 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: 144,   //center of the canvas
+  x: 144,
   x_velocity: 2,
   y: context.canvas.height - 450,
   y_velocity: 0
@@ -73,13 +73,11 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: context.canvas.width - 144,   //center of the canvas
+  x: context.canvas.width - 144,   r
   x_velocity: -2,
   y: context.canvas.height - 540,
   y_velocity: 0
-  }
-
-
+}
 
   rectangle =
   {
@@ -136,6 +134,9 @@ window.addEventListener("load", function(event) {
   const platform1Data = {};
   const platform2Data = {};
   const platform3Data = {};
+  const platform4Data = {};
+  const platform5Data = {};
+  const platform6Data = {};
 
   /* Objects to hold other players' positional data received
     from server */
@@ -220,7 +221,7 @@ window.addEventListener("load", function(event) {
       // platform1Data.x_velocity = platform1.x_velocity;
       // platform1Data.y_velocity = platform1.y_velocity;
       platform1Data.roomId = joinRoomRequest.id;
-      
+
       platform2Data.x = platform2.x;
       platform2Data.y = platform2.y;
       platform2Data.platformNo = 2;
@@ -239,11 +240,41 @@ window.addEventListener("load", function(event) {
       // platform3Data.y_velocity = platform3.y_velocity;
       platform3Data.roomId = joinRoomRequest.id;
 
+      platform4Data.x = platform4.x;
+      platform4Data.y = platform4.y;
+      platform4Data.platformNo = 4;
+      // platform3Data.height = platform3.height;
+      // platform3Data.width = platform3.width;
+      // platform3Data.x_velocity = platform3.x_velocity;
+      // platform3Data.y_velocity = platform3.y_velocity;
+      platform4Data.roomId = joinRoomRequest.id;
+
+      platform5Data.x = platform5.x;
+      platform5Data.y = platform5.y;
+      platform5Data.platformNo = 5;
+      // platform3Data.height = platform3.height;
+      // platform3Data.width = platform3.width;
+      // platform3Data.x_velocity = platform3.x_velocity;
+      // platform3Data.y_velocity = platform3.y_velocity;
+      platform5Data.roomId = joinRoomRequest.id;
+
+      platform6Data.x = platform6.x;
+      platform6Data.y = platform6.y;
+      platform6Data.platformNo = 6;
+      // platform3Data.height = platform3.height;
+      // platform3Data.width = platform3.width;
+      // platform3Data.x_velocity = platform3.x_velocity;
+      // platform3Data.y_velocity = platform3.y_velocity;
+      platform6Data.roomId = joinRoomRequest.id;
+
       socket.emit("platformData", platform1Data);
       socket.emit("platformData", platform2Data);
       socket.emit("platformData", platform3Data);
+      socket.emit("platformData", platform4Data);
+      socket.emit("platformData", platform5Data);
+      socket.emit("platformData", platform6Data);
     }
-    
+
     if (controller.up && rectangle.jumping == false)
     {
       rectangle.y_velocity -= 20;
@@ -269,12 +300,12 @@ window.addEventListener("load", function(event) {
     {
       rectangle.jumping = true;
     }
-    
+
     if (isHost)
     {
       platform1.x += platform1.x_velocity;
       platform2.x += platform2.x_velocity;
-      platform3.y += platform3.y_velocity;
+      platform3.x += platform3.x_velocity;
       platform4.x += platform4.x_velocity;
       platform5.x += platform5.x_velocity;
       platform6.x += platform6.x_velocity;
@@ -888,6 +919,21 @@ window.addEventListener("load", function(event) {
     {
       platform3Data.x = recdPlatformData.x;
       platform3Data.y = recdPlatformData.y;
+    }
+    else if (recdPlatformData.platformNo === 4)
+    {
+      platform4Data.x = recdPlatformData.x;
+      platform4Data.y = recdPlatformData.y;
+    }
+    else if (recdPlatformData.platformNo === 5)
+    {
+      platform5Data.x = recdPlatformData.x;
+      platform5Data.y = recdPlatformData.y;
+    }
+    else if (recdPlatformData.platformNo === 6)
+    {
+      platform6Data.x = recdPlatformData.x;
+      platform6Data.y = recdPlatformData.y;
     }
   });
   /* 3. receiving whether players are still connected to the game */
