@@ -73,7 +73,7 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: context.canvas.width - 144,   r
+  x: context.canvas.width - 144,
   x_velocity: -2,
   y: context.canvas.height - 540,
   y_velocity: 0
@@ -456,6 +456,7 @@ window.addEventListener("load", function(event) {
         platform6.x = context.canvas.width;
       }
 
+      // ability to jump on other player 2
       if(rectangle.x + rectangle.width > playerData_2.x && rectangle.x < playerData_2.x + 32 && rectangle.y + 32 < playerData_2.y){
 
         if(rectangle.y + rectangle.height + 7 > playerData_2.y && rectangle.y_velocity >= 0){
@@ -465,36 +466,75 @@ window.addEventListener("load", function(event) {
         }
       }
 
-      //right side collision detection
+      //right side collision detection, player 2
       if(rectangle.x >= playerData_2.x + 32 && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
 
-        console.log("right side");
-        console.log(playerData_2.x + 32);
-        console.log(rectangle.x);
-
         if((playerData_2.x + 32 - rectangle.x) > -5 && (playerData_2.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
-
-          console.log("rightbump");
-
-          playerData_2.x -= 10;
+          rectangle.x += 80;
         }
 
       }
 
-      //left side collision detection
+      //left side collision detection, player 2
       if(rectangle.x + rectangle.width <= playerData_2.x && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
 
-        console.log("left side");
-        console.log(playerData_2.x);
-        console.log(rectangle.x + rectangle.width);
-
         if(playerData_2.x - (rectangle.x + rectangle.width) < 5 && playerData_2.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+          rectangle.x -= 80;
+        }
+      }
 
-          console.log("leftbump");
+      // ability to jump on other player 3
+      if(rectangle.x + rectangle.width > playerData_3.x && rectangle.x < playerData_3.x + 32 && rectangle.y + 32 < playerData_3.y){
 
-          playerData_2.x += 10;
+        if(rectangle.y + rectangle.height + 7 > playerData_3.y && rectangle.y_velocity >= 0){
+          rectangle.y_velocity -= 30;
+          rectangle.y = playerData_3.y - rectangle.height;
+          rectangle.jumping = true;
+        }
+      }
+
+      //right side collision detection, player 3
+      if(rectangle.x >= playerData_3.x + 32 && rectangle.y + rectangle.height >= playerData_3.y + 32 && rectangle.y <= playerData_3.y){
+
+        if((playerData_3.x + 32 - rectangle.x) > -5 && (playerData_3.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
+          rectangle.x += 80;
         }
 
+      }
+
+      //left side collision detection, player 3
+      if(rectangle.x + rectangle.width <= playerData_3.x && rectangle.y + rectangle.height >= playerData_3.y + 32 && rectangle.y <= playerData_3.y){
+
+        if(playerData_3.x - (rectangle.x + rectangle.width) < 5 && playerData_3.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+          rectangle.x -= 80;
+        }
+      }
+
+      // ability to jump on other player 4
+      if(rectangle.x + rectangle.width > playerData_4.x && rectangle.x < playerData_4.x + 32 && rectangle.y + 32 < playerData_4.y){
+
+        if(rectangle.y + rectangle.height + 7 > playerData_4.y && rectangle.y_velocity >= 0){
+          rectangle.y_velocity -= 30;
+          rectangle.y = playerData_4.y - rectangle.height;
+          rectangle.jumping = true;
+        }
+      }
+
+      //right side collision detection, player 4
+      if(rectangle.x >= playerData_4.x + 32 && rectangle.y + rectangle.height >= playerData_4.y + 32 && rectangle.y <= playerData_4.y){
+
+        if((playerData_4.x + 32 - rectangle.x) > -5 && (playerData_4.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
+          rectangle.x += 80;
+        }
+
+      }
+
+      //left side collision detection, player 4
+      if(rectangle.x + rectangle.width <= playerData_4.x && rectangle.y + rectangle.height >= playerData_4.y + 32 && rectangle.y <= playerData_4.y){
+
+        if(playerData_4.x - (rectangle.x + rectangle.width) < 5 && playerData_4.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+          rectangle.x -= 80;
+        }
       }
 
     }
@@ -539,7 +579,7 @@ window.addEventListener("load", function(event) {
         platform6.x = context.canvas.width;
       }
 
-      // ability to jump on other players
+      // ability to jump on other player 2
       if(rectangle.x + rectangle.width > playerData_2.x && rectangle.x < playerData_2.x + 32 && rectangle.y + 32 < playerData_2.y){
 
         if(rectangle.y + rectangle.height + 7 > playerData_2.y && rectangle.y_velocity >= 0){
@@ -549,36 +589,75 @@ window.addEventListener("load", function(event) {
         }
       }
 
-      //right side collision detection
+      //right side collision detection, player 2
       if(rectangle.x >= playerData_2.x + 32 && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
 
-        console.log("right side");
-        console.log(playerData_2.x + 32);
-        console.log(rectangle.x);
-
         if((playerData_2.x + 32 - rectangle.x) > -5 && (playerData_2.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
-
-          console.log("rightbump");
-
-          playerData_2.x -= 10;
+          rectangle.x += 80;
         }
 
       }
 
-      //left side collision detection
+      //left side collision detection, player 2
       if(rectangle.x + rectangle.width <= playerData_2.x && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
 
-        console.log("left side");
-        console.log(playerData_2.x);
-        console.log(rectangle.x + rectangle.width);
-
         if(playerData_2.x - (rectangle.x + rectangle.width) < 5 && playerData_2.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+          rectangle.x -= 80;
+        }
+      }
 
-          console.log("leftbump");
+      // ability to jump on other player 3
+      if(rectangle.x + rectangle.width > playerData_3.x && rectangle.x < playerData_3.x + 32 && rectangle.y + 32 < playerData_3.y){
 
-          playerData_2.x += 10;
+        if(rectangle.y + rectangle.height + 7 > playerData_3.y && rectangle.y_velocity >= 0){
+          rectangle.y_velocity -= 30;
+          rectangle.y = playerData_3.y - rectangle.height;
+          rectangle.jumping = true;
+        }
+      }
+
+      //right side collision detection, player 3
+      if(rectangle.x >= playerData_3.x + 32 && rectangle.y + rectangle.height >= playerData_3.y + 32 && rectangle.y <= playerData_3.y){
+
+        if((playerData_3.x + 32 - rectangle.x) > -5 && (playerData_3.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
+          rectangle.x += 80;
         }
 
+      }
+
+      //left side collision detection, player 3
+      if(rectangle.x + rectangle.width <= playerData_3.x && rectangle.y + rectangle.height >= playerData_3.y + 32 && rectangle.y <= playerData_3.y){
+
+        if(playerData_3.x - (rectangle.x + rectangle.width) < 5 && playerData_3.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+          rectangle.x -= 80;
+        }
+      }
+
+      // ability to jump on other player 4
+      if(rectangle.x + rectangle.width > playerData_4.x && rectangle.x < playerData_4.x + 32 && rectangle.y + 32 < playerData_4.y){
+
+        if(rectangle.y + rectangle.height + 7 > playerData_4.y && rectangle.y_velocity >= 0){
+          rectangle.y_velocity -= 30;
+          rectangle.y = playerData_4.y - rectangle.height;
+          rectangle.jumping = true;
+        }
+      }
+
+      //right side collision detection, player 4
+      if(rectangle.x >= playerData_4.x + 32 && rectangle.y + rectangle.height >= playerData_4.y + 32 && rectangle.y <= playerData_4.y){
+
+        if((playerData_4.x + 32 - rectangle.x) > -5 && (playerData_4.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
+          rectangle.x += 80;
+        }
+
+      }
+
+      //left side collision detection, player 4
+      if(rectangle.x + rectangle.width <= playerData_4.x && rectangle.y + rectangle.height >= playerData_4.y + 32 && rectangle.y <= playerData_4.y){
+
+        if(playerData_4.x - (rectangle.x + rectangle.width) < 5 && playerData_4.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+          rectangle.x -= 80;
+        }
       }
 
 
