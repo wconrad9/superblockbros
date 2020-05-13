@@ -107,6 +107,10 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (request, response) => {
     response.sendFile(path.join(prodPath, "index.html"));
   });
+} else {
+  app.get("*", (request, response) => {
+    response.sendFile("https://localhost/index.html");
+  });
 }
 
 module.exports = {
