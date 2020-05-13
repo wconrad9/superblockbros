@@ -98,8 +98,13 @@ window.addEventListener("load", function(event) {
   // get whether this user is host (1) or not (0)
   const isHost = parseInt(params.get("host").toString());
 
-  // Object to hold my data to send to server
+  // Object to hold my player data to send to server
   const myData = {};
+  // Object to hold platform data to send to server... will only send if host
+  const platform1Data = {};
+  const platform2Data = {};
+  const platform3Data = {};
+
   /* Objects to hold other players' positional data received
     from server */
   const playerData_2 = {};
@@ -173,6 +178,40 @@ window.addEventListener("load", function(event) {
 
   loop = function() {
 
+    if (isHost)
+    {
+      platform1Data.x = platform1.x;
+      platform1Data.y = platform1.y;
+      platform1Data.platformNo = 1;
+      // platform1Data.height = platform1.height;
+      // platform1Data.width = platform1.width;
+      // platform1Data.x_velocity = platform1.x_velocity;
+      // platform1Data.y_velocity = platform1.y_velocity;
+      platform1Data.roomId = joinRoomRequest.id;
+      
+      platform2Data.x = platform2.x;
+      platform2Data.y = platform2.y;
+      platform2Data.platformNo = 2;
+      // platform2Data.height = platform2.height;
+      // platform2Data.width = platform2.width;
+      // platform2Data.x_velocity = platform2.x_velocity;
+      // platform2Data.y_velocity = platform2.y_velocity;
+      platform2Data.roomId = joinRoomRequest.id;
+
+      platform3Data.x = platform3.x;
+      platform3Data.y = platform3.y;
+      platform3Data.platformNo = 3;
+      // platform3Data.height = platform3.height;
+      // platform3Data.width = platform3.width;
+      // platform3Data.x_velocity = platform3.x_velocity;
+      // platform3Data.y_velocity = platform3.y_velocity;
+      platform3Data.roomId = joinRoomRequest.id;
+
+      socket.emit("platformData", platform1Data);
+      socket.emit("platformData", platform2Data);
+      socket.emit("platformData", platform3Data);
+    }
+    
     if (controller.up && rectangle.jumping == false)
     {
       rectangle.y_velocity -= 20;
@@ -182,7 +221,6 @@ window.addEventListener("load", function(event) {
     {
       rectangle.x_velocity -= 0.5;
     }
-
     if (controller.right)
     {
       rectangle.x_velocity += 0.5;
@@ -199,13 +237,20 @@ window.addEventListener("load", function(event) {
     {
       rectangle.jumping = true;
     }
-
-    platform1.x += platform1.x_velocity;
-
-    platform2.x += platform2.x_velocity;
-
-    platform3.y += platform3.y_velocity;
-
+    if (isHost)
+    {
+      platform1.x += platform1.x_velocity;
+      platform2.x += platform2.x_velocity;
+      platform3.y += platform3.y_velocity;
+    }
+    else {
+      platform1.x = platform1Data.x;
+      platform1.y = platform1Data.y;
+      platform2.x = platform2Data.x;
+      platform2.y = platform2Data.y;
+      platform3.x = platform3Data.x;
+      platform3.y = platform3Data.y;
+    }
     if (Math.abs(rectangle.x_velocity) < 0.1)
     {
       rectangle.x_velocity = 0;
@@ -221,11 +266,9 @@ window.addEventListener("load", function(event) {
       rectangle.y = context.canvas.height - 16 - 32;
       rectangle.y_velocity = 0;
     }
-
     // player in between platform x limits; above
     if(rectangle.x + rectangle.width > platform1.x && rectangle.x < platform1.x + platform1.width && rectangle.y < platform1.y + platform1.height)
     {
-
       console.log("rectangle.y above: " + rectangle.y);
       console.log("platform.y above: " + (platform1.y + platform1.height));
       //we want the player to land on the platform and stay on top
@@ -235,13 +278,10 @@ window.addEventListener("load", function(event) {
         rectangle.y = platform1.y - rectangle.height;
         rectangle.y_velocity = 0;
       }
-
     }
-
     // player in between platform x limits; above
     if(rectangle.x + rectangle.width > platform2.x && rectangle.x < platform2.x + platform2.width && rectangle.y < platform2.y + platform2.height)
     {
-
       console.log("rectangle.y above: " + rectangle.y);
       console.log("platform.y above: " + (platform2.y + platform2.height));
       //we want the player to land on the platform and stay on top
@@ -251,13 +291,10 @@ window.addEventListener("load", function(event) {
         rectangle.y = platform2.y - rectangle.height;
         rectangle.y_velocity = 0;
       }
-
     }
-
     // player in between platform x limits; above
     if(rectangle.x + rectangle.width > platform3.x && rectangle.x < platform3.x + platform3.width && rectangle.y < platform3.y + platform3.height)
     {
-
       console.log("rectangle.y above: " + rectangle.y);
       console.log("platform.y above: " + (platform3.y + platform3.height));
       //we want the player to land on the platform and stay on top
@@ -267,9 +304,7 @@ window.addEventListener("load", function(event) {
         rectangle.y = platform3.y - rectangle.height;
         rectangle.y_velocity = 0;
       }
-
     }
-
     // If game not started, player can go off left edge
     // and come out the right edge.
     if (!gameStarted)
@@ -281,20 +316,6 @@ window.addEventListener("load", function(event) {
       else if (rectangle.x > context.canvas.width) { // if rectangle goes past right boundary
         rectangle.x = -32;
       }
-
-      // platforms should translate across screen repeatedly
-      if (platform1.x > context.canvas.width) {
-        platform1.x = -(platform1.width);
-      }
-
-      if (platform2.x > context.canvas.width) {
-        platform2.x = -(platform2.width);
-      }
-
-      if (platform3.y < 0) {
-        platform3.y = context.canvas.height;
-      }
-
     }
     // If game started, this is not allowed
     else if (gameStarted)
@@ -308,22 +329,20 @@ window.addEventListener("load", function(event) {
       {
         rectangle.x = context.canvas.width - 32;
       }
-
-      // platforms should translate across screen repeatedly
-      if (platform1.x > context.canvas.width) {
-        platform1.x = -(platform1.width);
-      }
-
-      if (platform2.x > context.canvas.width) {
-        platform2.x = -(platform2.width);
-      }
-
-      if (platform3.y < 0) {
-        platform3.y = context.canvas.height;
-      }
-
-
     }
+    // platforms should keeping looping... if one goes off the left end, it should come back around the right end
+    if (platform1.x > context.canvas.width) {
+      platform1.x = -(platform1.width);
+    }
+
+    if (platform2.x > context.canvas.width) {
+      platform2.x = -(platform2.width);
+    }
+
+    if (platform3.y < 0) {
+      platform3.y = context.canvas.height;
+    }
+
     /* Drawing the level */
     context.fillStyle = "#202020";
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);// x, y, width, height
@@ -538,6 +557,8 @@ window.addEventListener("load", function(event) {
     myData.roomId = joinRoomRequest.id;
     socket.emit("playerData", myData);
 
+
+
     /* Changing text font/formatting for drawing playernames */
     context.textAlign = "center";
     let playerConnections = {
@@ -631,7 +652,25 @@ window.addEventListener("load", function(event) {
       playerData_4.name = playerData.name;
     }
   });
-  /* 2. receiving whether players are still connected to the game */
+  /* 2. receiving platform's positions from the server */
+  socket.on("platformData", recdPlatformData => {
+    if (recdPlatformData.platformNo === 1)
+    {
+      platform1Data.x = recdPlatformData.x;
+      platform1Data.y = recdPlatformData.y;
+    }
+    else if (recdPlatformData.platformNo === 2)
+    {
+      platform2Data.x = recdPlatformData.x;
+      platform2Data.y = recdPlatformData.y;
+    }
+    else if (recdPlatformData.platformNo === 3)
+    {
+      platform3Data.x = recdPlatformData.x;
+      platform3Data.y = recdPlatformData.y;
+    }
+  });
+  /* 3. receiving whether players are still connected to the game */
   socket.on("currentConnections", currentConnections => {
     connData = { ...currentConnections };
   });
