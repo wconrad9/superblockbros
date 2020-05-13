@@ -12,12 +12,12 @@ io.sockets.on("connection", socket => {
   console.log(`New connection -- socket id: ${socket.id}`); // eslint-disable-line no-console
 
   socket.on("joinRoom", joinRoomRequest => {
-    console.log("joinRoom message received");
+    // console.log("joinRoom message received");
     socket.join(joinRoomRequest.id);
   });
 
   socket.on("roomCheckRequest", roomCheckRequest => {
-    console.log("roomCheck message received");
+    // console.log("roomCheck message received");
     const roomCheckResponse = io.sockets.adapter.rooms[roomCheckRequest.id];
     socket.emit("roomCheckResponse", roomCheckResponse);
   });
@@ -39,7 +39,7 @@ io.sockets.on("connection", socket => {
   });
 
   socket.on("startRaceRequest", startRaceRequest => {
-    console.log("startRaceRequest received");
+    // console.log("startRaceRequest received");
     const startRaceResponse = { ...startRaceRequest };
     socket
       .to(startRaceRequest.roomId)
@@ -47,7 +47,7 @@ io.sockets.on("connection", socket => {
   });
 
   socket.on("leaveRoomRequest", leaveRoomRequest => {
-    console.log("leaveRoom message received");
+    // console.log("leaveRoom message received");
     socket.leave(leaveRoomRequest.id);
   });
 
@@ -55,6 +55,11 @@ io.sockets.on("connection", socket => {
     const updatedPlayerData = { ...playerData };
     updatedPlayerData.id = socket.id; // to get a unique identifier for each player
     socket.to(playerData.roomId).emit("playerData", updatedPlayerData);
+  });
+
+  socket.on("platformData", platformData => {
+    const platformDataCopy = { ...platformData };
+    socket.to(platformData.roomId).emit("platformData", platformDataCopy);
   });
 
   socket.on("checkConnections", playerConnections => {
