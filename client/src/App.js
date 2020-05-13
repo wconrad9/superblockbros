@@ -150,13 +150,17 @@ const App = () => {
         // Add game host to the list of players in the game
         createdGame.username = username;
         const queryParam = createdGame.id.toString();
-        const urlString =
+        let urlString =
           "http://localhost:3001/index.html?id=" +
           queryParam +
           "&host=1&name=" +
           username;
         // host=1 to indicate that this person is the host
         // name=username to pass playername to game
+        if (process.env.NODE_ENV === "production") {
+          urlString =
+            "/index.html?id=" + queryParam + "&host=1&name=" + username;
+        }
         setUrl(urlString);
         setCurrentGame(createdGame);
         // create a room with the game's Id
