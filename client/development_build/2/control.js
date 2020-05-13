@@ -1,5 +1,6 @@
 // Frank Poth 08/13/2017
 // Add event listener for if page is loaded
+
 window.addEventListener("load", function(event) {
   var context, menuButton, playButton, controller, rectangle, platform, loop;
 
@@ -23,7 +24,7 @@ window.addEventListener("load", function(event) {
   height: 16,
   width: 64,
   x: 144,   //center of the canvas
-  x_velocity: 5,
+  x_velocity: 2,
   y: context.canvas.height - 90,
   y_velocity: 0
   }
@@ -32,8 +33,8 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: 288,   //center of the canvas
-  x_velocity: 5,
+  x: context.canvas.width - 144,   //center of the canvas
+  x_velocity: -2,
   y: context.canvas.height - 180,
   y_velocity: 0
   }
@@ -42,11 +43,42 @@ window.addEventListener("load", function(event) {
   {
   height: 16,
   width: 64,
-  x: 1200,   //center of the canvas
-  x_velocity: 0,
+  x: 144,   //center of the canvas
+  x_velocity: 2,
   y: context.canvas.height - 270,
-  y_velocity: -2
+  y_velocity: 0
   }
+
+  platform4 =
+  {
+  height: 16,
+  width: 64,
+  x: context.canvas.width - 144,   //center of the canvas
+  x_velocity: -2,
+  y: context.canvas.height - 360,
+  y_velocity: 0
+  }
+
+  platform5 =
+  {
+  height: 16,
+  width: 64,
+  x: 144,   //center of the canvas
+  x_velocity: 2,
+  y: context.canvas.height - 450,
+  y_velocity: 0
+  }
+
+  platform6 =
+  {
+  height: 16,
+  width: 64,
+  x: context.canvas.width - 144,   //center of the canvas
+  x_velocity: -2,
+  y: context.canvas.height - 540,
+  y_velocity: 0
+  }
+
 
 
   rectangle =
@@ -187,7 +219,7 @@ window.addEventListener("load", function(event) {
     {
       rectangle.x_velocity += 0.5;
     }
-    
+
     rectangle.y_velocity += 0.75; // gravity
     rectangle.x += rectangle.x_velocity;
     rectangle.y += rectangle.y_velocity;
@@ -204,7 +236,13 @@ window.addEventListener("load", function(event) {
 
     platform2.x += platform2.x_velocity;
 
-    platform3.y += platform3.y_velocity;
+    platform3.x += platform3.x_velocity;
+
+    platform4.x += platform4.x_velocity;
+
+    platform5.x += platform5.x_velocity;
+
+    platform6.x += platform6.x_velocity;
 
     if (Math.abs(rectangle.x_velocity) < 0.1)
     {
@@ -226,8 +264,6 @@ window.addEventListener("load", function(event) {
     if(rectangle.x + rectangle.width > platform1.x && rectangle.x < platform1.x + platform1.width && rectangle.y < platform1.y + platform1.height)
     {
 
-      console.log("rectangle.y above: " + rectangle.y);
-      console.log("platform.y above: " + (platform1.y + platform1.height));
       //we want the player to land on the platform and stay on top
       if (rectangle.y + rectangle.height > platform1.y && rectangle.y_velocity >= 0)
         {
@@ -235,15 +271,12 @@ window.addEventListener("load", function(event) {
         rectangle.y = platform1.y - rectangle.height;
         rectangle.y_velocity = 0;
       }
-
     }
 
     // player in between platform x limits; above
     if(rectangle.x + rectangle.width > platform2.x && rectangle.x < platform2.x + platform2.width && rectangle.y < platform2.y + platform2.height)
     {
 
-      console.log("rectangle.y above: " + rectangle.y);
-      console.log("platform.y above: " + (platform2.y + platform2.height));
       //we want the player to land on the platform and stay on top
       if (rectangle.y + rectangle.height > platform2.y && rectangle.y_velocity >= 0)
         {
@@ -251,15 +284,12 @@ window.addEventListener("load", function(event) {
         rectangle.y = platform2.y - rectangle.height;
         rectangle.y_velocity = 0;
       }
-
     }
 
     // player in between platform x limits; above
     if(rectangle.x + rectangle.width > platform3.x && rectangle.x < platform3.x + platform3.width && rectangle.y < platform3.y + platform3.height)
     {
 
-      console.log("rectangle.y above: " + rectangle.y);
-      console.log("platform.y above: " + (platform3.y + platform3.height));
       //we want the player to land on the platform and stay on top
       if (rectangle.y + rectangle.height > platform3.y && rectangle.y_velocity >= 0)
         {
@@ -267,8 +297,47 @@ window.addEventListener("load", function(event) {
         rectangle.y = platform3.y - rectangle.height;
         rectangle.y_velocity = 0;
       }
-
     }
+
+    // player in between platform x limits; above
+    if(rectangle.x + rectangle.width > platform4.x && rectangle.x < platform4.x + platform4.width && rectangle.y < platform4.y + platform4.height)
+    {
+
+      //we want the player to land on the platform and stay on top
+      if (rectangle.y + rectangle.height > platform4.y && rectangle.y_velocity >= 0)
+        {
+        rectangle.jumping = false;
+        rectangle.y = platform4.y - rectangle.height;
+        rectangle.y_velocity = 0;
+      }
+    }
+
+    // player in between platform x limits; above
+    if(rectangle.x + rectangle.width > platform5.x && rectangle.x < platform5.x + platform5.width && rectangle.y < platform5.y + platform5.height)
+    {
+
+      //we want the player to land on the platform and stay on top
+      if (rectangle.y + rectangle.height > platform5.y && rectangle.y_velocity >= 0)
+        {
+        rectangle.jumping = false;
+        rectangle.y = platform5.y - rectangle.height;
+        rectangle.y_velocity = 0;
+      }
+    }
+
+    // player in between platform x limits; above
+    if(rectangle.x + rectangle.width > platform6.x && rectangle.x < platform6.x + platform6.width && rectangle.y < platform6.y + platform6.height)
+    {
+
+      //we want the player to land on the platform and stay on top
+      if (rectangle.y + rectangle.height > platform6.y && rectangle.y_velocity >= 0)
+        {
+        rectangle.jumping = false;
+        rectangle.y = platform6.y - rectangle.height;
+        rectangle.y_velocity = 0;
+      }
+    }
+
 
     // If game not started, player can go off left edge
     // and come out the right edge.
@@ -287,26 +356,78 @@ window.addEventListener("load", function(event) {
         platform1.x = -(platform1.width);
       }
 
-      if (platform2.x > context.canvas.width) {
-        platform2.x = -(platform2.width);
+      if (platform2.x + platform2.width < 0) {
+        platform2.x = context.canvas.width;
       }
 
-      if (platform3.y < 0) {
-        platform3.y = context.canvas.height;
+      if (platform3.x > context.canvas.width) {
+        platform3.x = -platform3.width;
       }
+
+      if (platform4.x + platform4.width < 0) {
+        platform4.x = context.canvas.width;
+      }
+
+      if (platform5.x > context.canvas.width) {
+        platform5.x = -platform5.width;
+      }
+
+      if (platform6.x + platform6.width < 0) {
+        platform6.x = context.canvas.width;
+      }
+
+      if(rectangle.x + rectangle.width > playerData_2.x && rectangle.x < playerData_2.x + 32 && rectangle.y + 32 < playerData_2.y){
+
+        if(rectangle.y + rectangle.height + 7 > playerData_2.y && rectangle.y_velocity >= 0){
+          rectangle.y_velocity -= 30;
+          rectangle.y = playerData_2.y - rectangle.height;
+          rectangle.jumping = true;
+        }
+      }
+
+      //right side collision detection
+      if(rectangle.x >= playerData_2.x + 32 && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
+
+        console.log("right side");
+        console.log(playerData_2.x + 32);
+        console.log(rectangle.x);
+
+        if((playerData_2.x + 32 - rectangle.x) > -5 && (playerData_2.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
+
+          console.log("rightbump");
+
+          playerData_2.x -= 10;
+        }
+
+      }
+
+      //left side collision detection
+      if(rectangle.x + rectangle.width <= playerData_2.x && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
+
+        console.log("left side");
+        console.log(playerData_2.x);
+        console.log(rectangle.x + rectangle.width);
+
+        if(playerData_2.x - (rectangle.x + rectangle.width) < 5 && playerData_2.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+
+          console.log("leftbump");
+
+          playerData_2.x += 10;
+        }
+
+      }
+
 
     }
     // If game started, this is not allowed
     else if (gameStarted)
     {
-      if (rectangle.x < 0)
-      {
-        rectangle.x = 0;
-        rectangle.x_velocity = 0;
+      // if rectangle is going off the left of the screen
+      if (rectangle.x < -32) {
+          rectangle.x = context.canvas.width;
       }
-      else if (rectangle.x > (context.canvas.width - 32))
-      {
-        rectangle.x = context.canvas.width - 32;
+      else if (rectangle.x > context.canvas.width) { // if rectangle goes past right boundary
+        rectangle.x = -32;
       }
 
       // platforms should translate across screen repeatedly
@@ -314,12 +435,66 @@ window.addEventListener("load", function(event) {
         platform1.x = -(platform1.width);
       }
 
-      if (platform2.x > context.canvas.width) {
-        platform2.x = -(platform2.width);
+      if (platform2.x + platform2.width < 0) {
+        platform2.x = context.canvas.width;
       }
 
-      if (platform3.y < 0) {
-        platform3.y = context.canvas.height;
+      if (platform3.x > context.canvas.width) {
+        platform3.x = -platform3.width;
+      }
+
+      if (platform4.x + platform4.width < 0) {
+        platform4.x = context.canvas.width;
+      }
+
+      if (platform5.x > context.canvas.width) {
+        platform5.x = -platform5.width;
+      }
+
+      if (platform6.x + platform6.width < 0) {
+        platform6.x = context.canvas.width;
+      }
+
+      // ability to jump on other players
+      if(rectangle.x + rectangle.width > playerData_2.x && rectangle.x < playerData_2.x + 32 && rectangle.y + 32 < playerData_2.y){
+
+        if(rectangle.y + rectangle.height + 7 > playerData_2.y && rectangle.y_velocity >= 0){
+          rectangle.y_velocity -= 30;
+          rectangle.y = playerData_2.y - rectangle.height;
+          rectangle.jumping = true;
+        }
+      }
+
+      //right side collision detection
+      if(rectangle.x >= playerData_2.x + 32 && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
+
+        console.log("right side");
+        console.log(playerData_2.x + 32);
+        console.log(rectangle.x);
+
+        if((playerData_2.x + 32 - rectangle.x) > -5 && (playerData_2.x + 32 - rectangle.x) < 0 && rectangle.x_velocity < 0){
+
+          console.log("rightbump");
+
+          playerData_2.x -= 10;
+        }
+
+      }
+
+      //left side collision detection
+      if(rectangle.x + rectangle.width <= playerData_2.x && rectangle.y + rectangle.height >= playerData_2.y + 32 && rectangle.y <= playerData_2.y){
+
+        console.log("left side");
+        console.log(playerData_2.x);
+        console.log(rectangle.x + rectangle.width);
+
+        if(playerData_2.x - (rectangle.x + rectangle.width) < 5 && playerData_2.x - (rectangle.x + rectangle.width) > 0 && rectangle.x_velocity > 0){
+
+          console.log("leftbump");
+
+          playerData_2.x += 10;
+        }
+
       }
 
 
@@ -490,13 +665,14 @@ window.addEventListener("load", function(event) {
     {
       context.fillText("Go! Reach the end first to win!", 5, 25);
       // Write 'END' below endzone
-      context.fillText("END", context.canvas.width - 27, 16 + 4);
+      context.fillText("END", context.canvas.width/2 + 2, 25);
       // Draw endzone
-      drawRect("#228B22", context.canvas.width - 32, 16 + rectangle.height);
+      drawRect("#228B22", context.canvas.width / 2, 16 + rectangle.height);
       context.fillStyle = "white";
       // if player reaches end
-      if (rectangle.x === context.canvas.width - 32 &&
-          rectangle.y === 16 + 32)
+      if (rectangle.x > context.canvas.width / 2 - 32 &&
+          rectangle.x < context.canvas.width / 2 + 32 &&
+          rectangle.y < 64)
       {
         endReached = true;
         youWin = true;
@@ -575,6 +751,12 @@ window.addEventListener("load", function(event) {
     drawPlatform("#FFFFFF", platform2.x, platform2.y);
     /* Drawing 3rd platform */
     drawPlatform("#FFFFFF", platform3.x, platform3.y);
+
+    drawPlatform("#FFFFFF", platform4.x, platform4.y);
+
+    drawPlatform("#FFFFFF", platform5.x, platform5.y);
+
+    drawPlatform("#FFFFFF", platform6.x, platform6.y);
 
     // call update when the browser is ready to draw again
     window.requestAnimationFrame(loop);
