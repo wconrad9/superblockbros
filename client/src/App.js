@@ -151,7 +151,7 @@ const App = () => {
         createdGame.username = username;
         const queryParam = createdGame.id.toString();
         let urlString =
-          "http://localhost:3001/index.html?id=" +
+          "http://localhost:3001/2.html?id=" +
           queryParam +
           "&host=1&name=" +
           username;
