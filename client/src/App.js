@@ -39,7 +39,7 @@ const App = () => {
 
   // establish socket connection & load the game data (only once on initial render)
   useEffect(() => {
-    const tempSock = io.connect("http://localhost:3001");
+    const tempSock = io.connect();
     setSocket(tempSock);
     // parse room-existence-responses from server, for generation of unique IDs
     tempSock.on("roomCheckResponse", roomCheckResponse => {
@@ -151,15 +151,14 @@ const App = () => {
         createdGame.username = username;
         const queryParam = createdGame.id.toString();
         let urlString =
-          "http://localhost:3001/2.html?id=" +
+          "http://localhost:3001/2.html?id=" + // url for dev
           queryParam +
           "&host=1&name=" +
           username;
         // host=1 to indicate that this person is the host
         // name=username to pass playername to game
         if (process.env.NODE_ENV === "production") {
-          urlString =
-            "/index.html?id=" + queryParam + "&host=1&name=" + username;
+          urlString = "/2.html?id=" + queryParam + "&host=1&name=" + username; // url for production
         }
         setUrl(urlString);
         setCurrentGame(createdGame);

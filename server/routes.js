@@ -107,12 +107,7 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (request, response) => {
     response.sendFile(path.join(prodPath, "index.html"));
   });
-} else {
-  app.get("*", (request, response) => {
-    response.sendFile("https://localhost:3001/index.html");
-  });
 }
-
 module.exports = {
   app,
   knex

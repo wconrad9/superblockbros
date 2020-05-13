@@ -123,12 +123,15 @@ const JoinInput = ({ username, socket, returnToPrevMode }) => {
           setGameFull(false);
           setGameStarted(false);
           const queryParam = event.target.value.toString();
-          const urlString =
-            "http://localhost:3001/index.html?id=" +
+          let urlString =
+            "http://localhost:3001/2.html?id=" + // url for development
             queryParam +
             "&host=0&name=" +
             username;
           // host=false at the end to indicate to the game that the person joining is not the host
+          if (process.env.NODE_ENV === "production") {
+            urlString = "/2.html?id=" + queryParam + "&host=0&name=" + username; // url for production
+          }
           setUrl(urlString);
         }}
       />

@@ -116,7 +116,7 @@ window.addEventListener("load", function(event) {
 
   /* Socket Code: */
   // connect to server via socket
-  const socket = io.connect('http://localhost:3001');
+  const socket = io.connect();
   // parse URL and extract queryparameters to enter a specific room
   const joinRoomRequest = {
     id: params.get("id").toString()
