@@ -2,7 +2,7 @@ Travis CI Badge: https://travis-ci.com/csci312a-s20/fp-superblock.svg?token=zsh6
 
 Explanation of the need: Being able to play multiplayer super mario bros with your friends, online.
 
-Link to deployed application: (link here)
+Link to deployed application: https://fp-superblock.herokuapp.com/
 
 # Project Skeleton Top-level
 
